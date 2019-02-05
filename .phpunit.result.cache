@@ -1,1 +1,1 @@
-C:30:"PHPUnit\Runner\TestResultCache":138:{a:2:{s:7:"defects";a:1:{s:33:"SampleTest::testTrueAssertstoTrue";i:5;}s:5:"times";a:1:{s:33:"SampleTest::testTrueAssertstoTrue";d:0.008;}}}
+C:30:"PHPUnit\Runner\TestResultCache":353:{a:2:{s:7:"defects";a:3:{s:33:"SampleTest::testTrueAssertstoTrue";i:5;s:7:"Warning";i:6;s:47:"ControllerTest::testcreated_database_connection";i:4;}s:5:"times";a:4:{s:33:"SampleTest::testTrueAssertstoTrue";d:0.008;s:37:"ControllerTest::testTrueAssertstoTrue";d:0.008;s:7:"Warning";d:0.009;s:47:"ControllerTest::testcreated_database_connection";d:0.009;}}}

@@ -2,24 +2,24 @@
 
 namespace src\Controller;
 
+use src\Model\Model;
+
+use PHPUnit\Framework\Exception;
+
+
 class Controller
 {
+    protected $model;
 
     public function __construct()
-    {
-        $this->createConenction();
+    {   
+        echo "Controller construct<br>";
+        $this->model = new Model();
     }
 
-    public function invoke($task)
+    public function addTask($task)
     {
-        // if(isset($task)){
-
-        // }
-    }
-
-    protected function createConenction()
-    {
-        
+        $this->model->addTask($task);
     }
 
 }

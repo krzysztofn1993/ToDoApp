@@ -10,6 +10,7 @@ class Model
     public function __construct()
     {
         $this->createConnection();
+        $this->createTable();
     }
 
     public function addTask($task)
@@ -22,8 +23,7 @@ class Model
 
     protected function sanitizeTask($task) 
     {
-        $task = trim($task);
-        return filter_var($task, FILTER_SANITIZE_STRING);
+        return filter_var(trim($task), FILTER_SANITIZE_STRING);
     }
     
     protected function createConnection()
@@ -31,8 +31,17 @@ class Model
         try {
             $this->dbh = new \PDO("mysql:host=localhost;dbname=test",);
         } catch (Exception $e) {
-            echo $e->getMessage();
+            echo "Couldnt connect to databse. Message ".$e->getMessage();
         }
+    }
+
+    protected function createTable()
+    {
+        $this->dbh->exec("CREATE TABLE TASKS(
+            ID   INT NOT NULL AUTO_INCREMENT,
+            TASK VARCHAR (200) NOT NULL,   
+            PRIMARY KEY (ID)
+         );");
     }
 }
 

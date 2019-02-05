@@ -16,8 +16,10 @@ class Model
     public function addTask($task)
     {
         $task = $this->sanitizeTask($task);
-        if($task != false && ! (empty($task))){
-
+        if ($task != false && ! (empty($task))) {
+            $this->dbh->exec("INSERT INTO TASKS (ID,TASK)
+            VALUES(0,\"". $task . "\");"
+            );
         }
     }
 

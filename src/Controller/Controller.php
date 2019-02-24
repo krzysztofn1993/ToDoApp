@@ -13,7 +13,6 @@ class Controller
 
     public function __construct()
     {   
-        echo "Controller construct<br>";
         $this->model = new Model();
     }
 

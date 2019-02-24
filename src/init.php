@@ -22,7 +22,9 @@ if (isset($_POST["submit"])) {
 }
 ?>
 </body>
-<!-- <?php require("../src/footer.php") ?> -->
+ <?php 
+  //require("../src/footer.php") 
+ ?> 
 
 
 

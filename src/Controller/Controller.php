@@ -1,10 +1,8 @@
 <?php 
 
 namespace src\Controller;
-
 use src\Model\Model;
 
-use PHPUnit\Framework\Exception;
 
 
 class Controller
@@ -19,6 +17,10 @@ class Controller
     public function addTask($task)
     {
         $this->model->addTask($task);
+    }
+
+    public function askForTasks(){
+        return $this->model->askForTasks();
     }
 
 }

@@ -1,44 +1,54 @@
-<?php 
-
+<?php
 namespace src\Model;
 
 class Model
 {
-    protected $dbh;
-
-    protected function tableExist(){
-        try {
-            $this->dbh->query("SELECT 1 FROM tasks LIMIT 1");
-            return true;
-        } catch (Exception $e) {
-            echo "Table doesnt exists. Trying to create new one".$e->getMessage();
-            $this->createTable();
-        }
-    }
+    public $that;
+    public $dbh;
+    protected $counter = 0;
 
     public function __construct()
     {
+        if(is_null($this->that)) {
+            $this->counter++;
+            $this->that = $this;
+        }
         $this->createConnection();
-        $this->createTable();
+        if (!$this->tableExist()) {
+            $this->createTable();
+        }
+        return $this->that;
+    }
+    protected function tableExist(){
+        $exists = $this->dbh->query("select 1 from tasks limit 1");
+        if (!$exists) {
+            error_log("Table doesnt exists.");
+            return false;
+        }
+
+        return true;
     }
 
     public function addTask($task)
     {
-        $this->tableExist();
         $task = $this->sanitizeTask($task);
         if ($task != false && ! (empty($task))) {
             $changedRows = $this->addToDB($task);
         }
+
+        return $changedRows;
     }
     
     protected function addToDB($task){
-        try {
-            $changedRows = $this->dbh->exec(
-                "INSERT INTO TASKS (ID,TASK) VALUES(0,\"". $task . "\");"
-            );
-            return $changedRows;   
-        } catch (\Throwable $e) {
-            echo "Something happened while inserting into DB". $e->getMessage();
+        $changedRows = $this->dbh->exec(
+            "INSERT INTO TASKS (ID,TASK) VALUES(0,\"". $task . "\");"
+        ); 
+        if ($changedRows !== false) {
+
+            return $changedRows;
+        } else {
+            error_log("Something happened while inserting into DB ");
+
             return false;
         }
     }
@@ -50,26 +60,30 @@ class Model
     
     protected function createConnection()
     {
-        try {
-            $this->dbh = new \PDO("mysql:host=localhost;dbname=test");
-        } catch (Exception $e) {
-            echo "Couldnt connect to databse. Message ".$e->getMessage();
+        $connection = $this->dbh = new \PDO("mysql:host=localhost;dbname=test", "root", "", []);
+        if ($connection) {
+            
+        } else{
+            error_log("Couldnt connect to databse");
         }
     }
 
     protected function createTable()
     {
-        try {
-            $this->dbh->exec("CREATE TABLE TASKS(
-                ID   INT NOT NULL AUTO_INCREMENT,
-                TASK VARCHAR (200) NOT NULL,   
-                PRIMARY KEY (ID));"
-                );
-            return true;
-        } catch (\Throwable $e) {
-            echo "Couldn't create table".$e->getMessage();
-            return false;
+        $created = $this->dbh->query("CREATE TABLE TASKS( ID INT NOT NULL AUTO_INCREMENT, TASK VARCHAR (200) NOT NULL, PRIMARY KEY (ID))");
+        if($created){
+            error_log("Created table") ;
+        } else{
+            error_log("Couldnt created table") ;
         }
+    }
+
+    public function askForTasks(){
+        $query = 'select id,task from tasks';
+        $sth = $this->dbh->prepare($query);
+        $sth->execute();
+        $result = $sth->fetchAll();
+        return $result;
     }
 }
 

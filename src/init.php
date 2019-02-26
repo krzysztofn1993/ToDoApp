@@ -3,28 +3,29 @@
 use src\Controller\Controller;
 
 require("../vendor/autoload.php");
-require("../src/head.php");
+
 ?>
 
 <body>
 <section class="wrapper">
-    <form  class="form" action="" method="post">
+    <form class="form" action="/Projects/ToDoApp/src/add.php" method="post">
         <label for="todo">What you have to do? </label>
         <input type="text" id="todo" name="task" required>
-        <button type="submit" name="submit">Add</button>
+        <button type="submit" value="add" name="submit">Add</button>
     </form>
 </section>
-
 <?php
-$control = new Controller();
-if (isset($_POST["submit"])) {
-    $control->addTask($_POST["task"]);
+
+$controller = new Controller();
+$result = $controller->askForTasks();
+foreach ($result as $key => $value) {
+    echo "<p>" . $value['id'] . ". " . $value['task'] . "</p>";
 }
 ?>
 </body>
- <?php 
-  //require("../src/footer.php") 
- ?> 
+<?php
+// require("../src/footer.php"); 
+?>
 
 
 

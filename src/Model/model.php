@@ -85,6 +85,20 @@ class Model
         $result = $sth->fetchAll();
         return $result;
     }
+
+    public function deleteTask(string $id){
+        $this->dbh->exec(
+            'DELETE FROM TASKS WHERE ID =' . $id
+        );
+        $this->dbh->exec(
+            'ALTER TABLE TASKS DROP ID'
+        );
+        $this->dbh->exec(
+            'ALTER TABLE TASKS ADD ID INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+             ADD PRIMARY KEY (ID);'
+        );
+
+    }
 }
 
 ?>

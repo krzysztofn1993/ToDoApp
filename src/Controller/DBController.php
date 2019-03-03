@@ -1,30 +1,30 @@
 <?php 
 
 namespace src\Controller;
-use src\Model\Model;
+use src\Model\Task;
 
 
 
-class Controller
+class DBController
 {
-    protected $model;
+    protected $task;
 
     public function __construct()
     {   
-        $this->model = new Model();
+        $this->task = new Task();
     }
 
     public function addTask(string $task)
     {
-        $this->model->addTask($task);
+        $this->task->addTask($task);
     }
 
     public function askForTasks(){
-        return $this->model->askForTasks();
+        return $this->task->askForTasks();
     }
 
     public function deleteTask(string $id){
-        $this->model->deleteTask($id);
+        $this->task->deleteTask($id);
     }
 
 }

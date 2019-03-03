@@ -1,10 +1,13 @@
 <?php
 namespace src\Model;
 
-class Model
+class Task
 {
     public $that;
     public $dbh;
+    private $polishCharacters = ['/ą/', '/ć/', '/ę/', '/ł/', '/ó/', '/ń/', '/ś/', '/ź/', '/ż/'];
+    private $polishCharacterReplace = ['a', 'c', 'e', 'l', 'o', 'n', 's', 'z', 'z'];
+
     protected $counter = 0;
 
     public function __construct()
@@ -32,6 +35,7 @@ class Model
     public function addTask($task)
     {
         $task = $this->sanitizeTask($task);
+        $task = $this->replacePolishCharacters($task);
         if ($task != false && ! (empty($task))) {
             $changedRows = $this->addToDB($task);
         }
@@ -40,6 +44,7 @@ class Model
     }
     
     protected function addToDB($task){
+        $task = mb_convert_encoding($task, 'utf8');
         $changedRows = $this->dbh->exec(
             "INSERT INTO TASKS (ID,TASK) VALUES(0,\"". $task . "\");"
         ); 
@@ -53,9 +58,14 @@ class Model
         }
     }
 
-    protected function sanitizeTask($task) 
+    protected function sanitizeTask($task): string 
     {
-        return filter_var(trim($task), FILTER_SANITIZE_STRING);
+        $task =  filter_var(trim($task), FILTER_SANITIZE_STRING);
+        if(strlen($task) !== 0){
+            $_SESSION['hotpotat'] = 'kek';
+        }
+        return $task;
+
     }
     
     protected function createConnection()
@@ -70,7 +80,8 @@ class Model
 
     protected function createTable()
     {
-        $created = $this->dbh->query("CREATE TABLE TASKS( ID INT NOT NULL AUTO_INCREMENT, TASK VARCHAR (200) NOT NULL, PRIMARY KEY (ID))");
+        $created = $this->dbh->query("CREATE TABLE TASKS( ID INT NOT NULL AUTO_INCREMENT,
+         TASK VARCHAR (200) NOT NULL, PRIMARY KEY (ID))");
         if($created){
             error_log("Created table") ;
         } else{
@@ -97,7 +108,12 @@ class Model
             'ALTER TABLE TASKS ADD ID INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
              ADD PRIMARY KEY (ID);'
         );
+    }
 
+    protected function replacePolishCharacters(string $task): string 
+    {
+
+        return preg_replace($this->polishCharacters, $this->polishCharacterReplace, $task);
     }
 }
 

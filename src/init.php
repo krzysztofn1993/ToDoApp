@@ -1,8 +1,8 @@
 <?php
+session_start();
 require("../src/head.php");
 require("../vendor/autoload.php");
-
-use src\Controller\Controller;
+use src\Controller\DBController;
 ?>
 
 <body>
@@ -16,15 +16,17 @@ use src\Controller\Controller;
     </form>
 <?php
 
-$controller = new Controller();
+$controller = new DBController();
 $result = $controller->askForTasks();
-echo "<ul class='task'>";
-foreach ($result as $key => $value) {
-    echo "<div class='task__row'><li class='task__element'><span class='task__id'>" . $value['id'] .
-     "</span>" . ". " . ucfirst($value['task']) . "</li>" . "<a class='task__delete' href='../src/add.php?id=" . $value['id'] .
-    "'>x</a></div>";
+if(!empty($result)) {
+    echo "<ul class='task'>";
+    foreach ($result as $key => $value) {
+        echo "<div class='task__row'><li class='task__element'><span class='task__id'>" . $value['id'] .
+         "</span>" . ". " . ucfirst($value['task']) . "</li>" . "<a class='task__delete' href='../src/add.php?id=" . $value['id'] .
+        "'>x</a></div>";
+    }
+    echo "</ul>";
 }
-echo "</ul>";
 ?>
 </section>
 </body>

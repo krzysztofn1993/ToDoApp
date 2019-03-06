@@ -1,0 +1,7 @@
+{
+    "name": "krzyniu/to-do-app",
+    "description": "First mvc php ToDoApp project",
+    "type": "project",
+    "license": "MIT",
+    "require": {}
+}

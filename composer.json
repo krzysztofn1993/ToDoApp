@@ -3,5 +3,12 @@
     "description": "First mvc php ToDoApp project",
     "type": "project",
     "license": "MIT",
-    "require": {}
+    "require": {},
+    
+    "autoload": {
+        "psr-4": {
+             "Core\\": "Core/",
+             "App\\": "App/"
+        }
+    }
 }

@@ -42,7 +42,9 @@ class Router {
 
             return true;
         } else {
-
+            $code = 404;
+            $message = 'Controller for your given url doesnt exists';
+            $this->error->notFound($code, $message)
             return false;
         }
     }

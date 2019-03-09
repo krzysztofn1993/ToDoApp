@@ -2,32 +2,63 @@
 
 namespace Core;
 
-use App\Controller\Home;
+use App\Helpers\Erorr;
+
 
 class Router {
 
-    protected $controller = 'Home';
+    protected $controller = 'App\Controller\Home';
     protected $method = 'index';
-    
-    public function __construct()
-    {
+    protected $error;
 
+    public function __construc(){
+        $this->error = new Erorr;
     }
 
     public function goTo($url)
     {
         $url = trim($url);
         if ($url === "") {
-            $home = new Home;
-            $home->index();
+            $this->callController();
+        } else {
+            $this->createControllerNamespace($url);
+            $this->getMethodToCall($url);
+            $this->callController();
         }
-
     }
 
-    protected function checkController(string $url)
+    protected function createControllerNamespace(string $name) : string
     {
+        $this->controller = preg_replace('/\w+$/', $name, $this->controller);
+
+        return $this->controller;
     }
 
+    protected function callController() : bool
+    {
+        if(class_exists($this->controller) && method_exists($this->controller, $this->method)) {
+            $this->controller = new $this->controller;
+            call_user_func([$this->controller, $this->method]);
+
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+    
+    protected function getMethodToCall($url) : string
+    {
+        if (preg_match('/\/(\w+)\//', $url, $matches) === true) {
+            $this->method = $matches[1];
+
+            return $this->method;
+        } else {
+            echo "404 method not found";
+
+            return $this->method;
+        }
+    }
 }
 
 ?>

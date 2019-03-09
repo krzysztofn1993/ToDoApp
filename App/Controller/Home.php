@@ -5,7 +5,7 @@ namespace App\Controller;
 class Home {
 
     public function __construct(){
-        echo "Construc Index<br>";
+        echo "Construct Index<br>";
     }
 
     public function index(){

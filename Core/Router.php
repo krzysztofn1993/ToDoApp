@@ -2,18 +2,13 @@
 
 namespace Core;
 
-use App\Helpers\Erorr;
+use App\Helpers\Error;
 
 
 class Router {
 
     protected $controller = 'App\Controller\Home';
     protected $method = 'index';
-    protected $error;
-
-    public function __construc(){
-        $this->error = new Erorr;
-    }
 
     public function goTo($url)
     {
@@ -21,44 +16,47 @@ class Router {
         if ($url === "") {
             $this->callController();
         } else {
-            $this->createControllerNamespace($url);
-            $this->getMethodToCall($url);
-            $this->callController();
+            try {
+                $this->createControllerNamespace($url);
+                $this->callController();
+                $this->callMethod($url);
+            } catch (\Exception $e) {
+                
+            }
         }
     }
 
-    protected function createControllerNamespace(string $name) : string
+    protected function createControllerNamespace(string $url) : string
     {
-        $this->controller = preg_replace('/\w+$/', $name, $this->controller);
-
+        preg_match('/(\w+)\/?/', $url, $matches);
+        $this->controller = preg_replace('/(\w+)$/', $matches[1] , $this->controller);
         return $this->controller;
     }
 
     protected function callController() : bool
     {
-        if(class_exists($this->controller) && method_exists($this->controller, $this->method)) {
+        if(class_exists($this->controller)) {
             $this->controller = new $this->controller;
-            call_user_func([$this->controller, $this->method]);
-
+            
             return true;
         } else {
-            $code = 404;
-            $message = 'Controller for your given url doesnt exists';
-            $this->error->notFound($code, $message)
-            return false;
+            throw new Error('Controller for your given url doesnt exists', 404);
         }
     }
     
-    protected function getMethodToCall($url) : string
+    protected function callMethod($url) : string
     {
-        if (preg_match('/\/(\w+)\//', $url, $matches) === true) {
+        if (preg_match('/\/(\w+)\//', $url, $matches) === true ) {
             $this->method = $matches[1];
-
+            call_user_func([$this->controller, $this->method]);
+            
+            return $this->method;
+        } elseif (!isset($matches[1])) {
+            call_user_func([$this->controller, $this->method]);
+            
             return $this->method;
         } else {
-            echo "404 method not found";
-
-            return $this->method;
+            throw new Error('Method for your given url doesnt exists', 404);
         }
     }
 }

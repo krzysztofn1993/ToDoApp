@@ -65,6 +65,7 @@ class Router {
     
     protected function callPage()
     {
+        $this->controller = new $this->controller;
         call_user_func([$this->controller, $this->method]);
     }
 

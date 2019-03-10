@@ -12,14 +12,15 @@ class Router {
 
     public function goTo($url)
     {
-        $url = trim($url);
+        $url = $this->sanitizeURL($url);
         if ($url === "") {
-            $this->callController();
+            $this->callPage();
         } else {
             try {
                 $this->createControllerNamespace($url);
-                $this->callController();
-                $this->callMethod($url);
+                $this->checkIfControllerExists();
+                $this->checkIfMethodExists($url);
+                $this->callPage();
             } catch (\Exception $e) {
                 
             }
@@ -30,34 +31,49 @@ class Router {
     {
         preg_match('/(\w+)\/?/', $url, $matches);
         $this->controller = preg_replace('/(\w+)$/', $matches[1] , $this->controller);
+
         return $this->controller;
     }
 
-    protected function callController() : bool
+    protected function checkIfControllerExists() : bool
     {
         if(class_exists($this->controller)) {
-            $this->controller = new $this->controller;
-            
+
             return true;
         } else {
-            throw new Error('Controller for your given url doesnt exists', 404);
+            Error::FourOFour();
         }
     }
     
-    protected function callMethod($url) : string
+    protected function checkIfMethodExists($url) : bool
     {
-        if (preg_match('/\/(\w+)\//', $url, $matches) === true ) {
+        if (preg_match('/\/(\w+)\/?/', $url, $matches) == true ) {
             $this->method = $matches[1];
-            call_user_func([$this->controller, $this->method]);
-            
-            return $this->method;
+            if (method_exists($this->controller, $this->method)) {
+
+                return true;
+            } else {
+                Error::FourOFour();
+            }
         } elseif (!isset($matches[1])) {
-            call_user_func([$this->controller, $this->method]);
             
-            return $this->method;
+            return true;
         } else {
-            throw new Error('Method for your given url doesnt exists', 404);
+            Error::FourOFour();
         }
+    }
+    
+    protected function callPage()
+    {
+        call_user_func([$this->controller, $this->method]);
+    }
+
+    protected function sanitizeURL(string $url) : string
+    {
+        /* Add better sanitization
+        */
+        $url = trim($url);
+        return $url; 
     }
 }
 

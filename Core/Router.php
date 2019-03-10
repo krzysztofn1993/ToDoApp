@@ -41,7 +41,7 @@ class Router {
 
             return true;
         } else {
-            Error::FourOFour();
+            Error::fourOFour();
         }
     }
     
@@ -53,13 +53,13 @@ class Router {
 
                 return true;
             } else {
-                Error::FourOFour();
+                Error::fourOFour();
             }
         } elseif (!isset($matches[1])) {
             
             return true;
         } else {
-            Error::FourOFour();
+            Error::fourOFour();
         }
     }
     

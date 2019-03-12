@@ -4,7 +4,6 @@ namespace Core;
 
 use App\Helpers\Error;
 
-
 class Router {
 
     protected $controller = 'App\Controller\Home';
@@ -22,7 +21,7 @@ class Router {
                 $this->checkIfMethodExists($url);
                 $this->callPage();
             } catch (\Exception $e) {
-                
+                Error::fourOFour($e->getMessage());
             }
         }
     }
@@ -30,7 +29,7 @@ class Router {
     protected function createControllerNamespace(string $url) : string
     {
         preg_match('/(\w+)\/?/', $url, $matches);
-        $this->controller = preg_replace('/(\w+)$/', $matches[1] , $this->controller);
+        $this->controller = preg_replace('/(\w+)$/', ucfirst(strtolower($matches[1])) , $this->controller);
 
         return $this->controller;
     }
@@ -41,7 +40,7 @@ class Router {
 
             return true;
         } else {
-            Error::fourOFour();
+            throw new Error('Controller doesnt exist');
         }
     }
     
@@ -53,13 +52,13 @@ class Router {
 
                 return true;
             } else {
-                Error::fourOFour();
+                throw new Error("$this->method does not exist in $this->controller");
             }
         } elseif (!isset($matches[1])) {
             
             return true;
         } else {
-            Error::fourOFour();
+            throw new Error("Bad url given: $url");
         }
     }
     
@@ -71,8 +70,6 @@ class Router {
 
     protected function sanitizeURL(string $url) : string
     {
-        /* Add better sanitization
-        */
         $url = trim($url);
         return $url; 
     }

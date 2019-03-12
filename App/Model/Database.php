@@ -4,11 +4,11 @@ namespace App\Model;
 
 class Database {
 
-    public static $localhost = "localhost";
-    public static $password = "";
-    public static $dbname = 'test';
-    public static $user = "root";
-    public static $handler = null;
+    private $dbname = 'test';
+    private $handler = null;
+    private $localhost = 'localhost';
+    private $password = '';
+    private $user = 'root';
 
     public function __construct()
     {
@@ -17,7 +17,6 @@ class Database {
             $this->user, 
             $this->password);
     }
-    
 
 }
 

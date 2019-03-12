@@ -15,7 +15,6 @@ class Register {
     
     public function check()
     {
-        echo "check";
     }
 
 }

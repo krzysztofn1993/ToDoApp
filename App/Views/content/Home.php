@@ -2,10 +2,30 @@
 $title = "Home Page";
 require_once('../App/Views/common/head.php');
 ?>
-<body>
-    <h1 class="col-lg-12">Welcome to my ToDoApp</h1>
-    <a href="./login">Login</a>
-    <a href="./register">Register</a>
+<body class="bg-primary vh-100">
+<div class="col-lg-12 h-100 wrapper d-flex flex-column justify-content-center align-items-center">
+    <div class="row">
+        <h1 class="">Welcome!<br> ToDoApp</h1>
+    </div>
+    <div class="row">
+        <form action="./app" method="POST" autocomplete="off">
+            <div class="row d-flex align-items-center justify-content-center">
+                <label for="login"></label>
+                <input type="text" name="login" id="login" required autocomplete="off" 
+                placeholder="Login" class="rounded  my-2">
+            </div>
+            <div class="row d-flex justify-content-center">
+                <label for="password"></label>
+                <input type="password" name="password" required autocomplete="off" 
+                placeholder="Password" class="rounded my-2">
+            </div>
+    </div>
+    <div class="row d-flex justify-content-around my-2">
+        <a class="btn btn-success border border-dark text-dark mx-2" href="./login">Login</a>
+        </form>
+        <a class="btn btn-secondary border border-dark text-dark mx-2" href="./register">Register</a>
+    </div>
+</div>
 <?php
 require_once('../App/Views/common/footer.php');
 ?>

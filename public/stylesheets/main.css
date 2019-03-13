@@ -1,9 +1,16 @@
 html {
-    background-color: #4faaad;
+    /* background-color: #4faaad; */
 }
 
 a, a:visited, a:focus, a:hover {
-    font-style: none;
     text-decoration: none;
-    color: black;
 }
+
+.vh-100 {
+    height: 100vh;
+    max-height: 100vh;
+}
+
+::-webkit-input-placeholder {
+    text-align: center;
+ }

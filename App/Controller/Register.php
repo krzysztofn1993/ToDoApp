@@ -10,7 +10,7 @@ class Register {
 
     public function index()
     {
-        echo "Register index<br>";
+        require_once('../App/Views/content/Register.php');
     }
     
     public function check()

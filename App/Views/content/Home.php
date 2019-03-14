@@ -21,7 +21,8 @@ require_once('../App/Views/common/head.php');
             </div>
             <div class="row d-flex justify-content-around my-2">
                 <input type="submit" value="Login" class="btn btn-success border border-dark text-dark mx-2">
-                <a class="btn btn-secondary border border-dark text-dark mx-2" href="./register">Register</a>
+                <a class="btn btn-secondary border border-dark text-dark mx-2" href="./register">
+                Go to Register</a>
             </div>
         </form>
     </div>

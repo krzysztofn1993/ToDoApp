@@ -14,7 +14,7 @@ class Register {
     public function __construct()
     {
         $this->user = new User;
-        $this->dataBase = new Database;
+        $this->dataBase = Database::getInstance();
     }
 
     public function index()
@@ -24,7 +24,11 @@ class Register {
     
     public function check()
     { 
-        $this->dataBase->registerUser($_POST['login'], $_POST['password']);
+        $this->user->login = $_POST['login'];
+        $this->user->password = $_POST['password'];
+        $this->user->date = date("Y-m-d H:i:s");
+        unset($_POST);
+        $this->dataBase->registerUser($this->user);
     }
 
 }

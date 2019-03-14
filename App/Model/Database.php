@@ -3,49 +3,87 @@
 namespace App\Model;
 
 use App\Helpers\Error;
-
+use App\Model\User;
 
 class Database {
 
-    private $dbname = 'test';
+    private $dbName = 'test';
     private $db = null;
     private $localhost = 'localhost';
-    private $password = '';
-    private $user = 'root';
+    private $dbPassword = '';
+    private $dbUser = 'root';
+    private $user;
+    private static $instance = null;
 
-    public function __construct()
+    private function __construct()
     {       
         $this->connectToDB();
         $this->createUsersTableIfNotExists();
+        $this->user = new User;
     }
 
-    public function registerUser(string $login,string $password) 
+    public static function getInstance()
     {
-        $this->canRegister($login);
+        if (self::$instance === null) {
+            self::$instance = new Database;
+        }
+
+        return self::$instance;
     }
 
-    private function canRegister(string $login): int
+    public function registerUser(user $user): bool
     {
-        $query = "SELECT * FROM users where user = \"$login\"";
-        $result = $this->db->exec($query);
-        return $result;
-    }
+        if ($this->canRegister($user->login)) {
 
-    private function connectToDB()
-    {
-        try {
-            $this->selectDB();
-            return true;
-        } catch (\Throwable $th) {
-            $this->createDB();
-            $this->selectDB();
-            return true;
+            return $this->insertUserToDataBase($user);    
+        } else {
+
+            return false;
         }
     }
 
-    private function createDB()
+    private function canRegister(string $login): bool
     {
-        $query = "CREATE DATABASE IF NOT EXISTS $this->dbname";
+        $query = 'SELECT * FROM users WHERE user = $login';
+        $result = $this->db->exec($query);
+
+        return $result > 0? true : false;
+    }
+
+    private function insertUserToDataBase(user $user): bool
+    {
+        $query = "INSERT INTO USER VALUES" .
+            "($user->login, $user->password, $user->date)";
+        try {
+            $this->db->exec($query);
+        } catch (\Throwable $th) {
+            if ($this->checkIfUserAdded($user)) {
+                
+            }
+            
+        }
+        return true;
+    }
+
+    private function checkIfUserAdded(user $user)
+    {
+        $query = "SELECT * FROM USER WHERE login = $user->login OR date = $user->date" .
+            " OR $password = $user->password";
+    }
+
+    private function connectToDB(): void
+    {
+        try {
+            $this->selectDB();
+        } catch (\Throwable $th) {
+            $this->createDB();
+            $this->selectDB();
+        }
+    }
+
+    private function createDB(): void
+    {
+        $query = "CREATE DATABASE IF NOT EXISTS $this->dbName";
         try {
             $this->db = new \PDO("mysql:host=$this->localhost");
         } catch (\Throwable $th) {
@@ -61,12 +99,12 @@ class Database {
     private function selectDB()
     {
         $this->db = new \PDO(
-            "mysql:host=$this->localhost;dbname=$this->dbname", 
-            $this->user, 
-            $this->password);
+            "mysql:host=$this->localhost;dbname=$this->dbName", 
+            $this->dbUser, 
+            $this->dbPassword);
     }
 
-    private function createUsersTableIfNotExists()
+    private function createUsersTableIfNotExists(): void
     {
         $query = 'CREATE TABLE IF NOT EXISTS User(' .
             'ID INT NOT NULL AUTO_INCREMENT,' .
@@ -74,11 +112,11 @@ class Database {
             'PASSWORD VARCHAR(255) NOT NULL,' .
             'DATE DATE,' .
             'PRIMARY KEY (ID))';
-            try {
-                $this->db->exec($query);
-            } catch (\Throwable $th) {
-                Error::fourOFour("Couldnt create table");
-            }
+        try {
+            $this->db->exec($query);
+        } catch (\Throwable $th) {
+            Error::fourOFour("Couldnt create table");
+        }
     }
 }
 

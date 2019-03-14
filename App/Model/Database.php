@@ -58,17 +58,28 @@ class Database {
             $this->db->exec($query);
         } catch (\Throwable $th) {
             if ($this->checkIfUserAdded($user)) {
-                
+                $this->rollBackAddedUser($user);
             }
-            
         }
+
         return true;
     }
 
     private function checkIfUserAdded(user $user)
     {
-        $query = "SELECT * FROM USER WHERE login = $user->login OR date = $user->date" .
-            " OR $password = $user->password";
+        $query = "SELECT * FROM USER WHERE login = $user->login";
+        try {
+            $this->db->exec($query);
+        } catch (\Throwable $th) {
+            Error::fourOFour("Error while checking if User was added");
+        }
+    }
+
+    private function rollBackAddedUser(user $user)
+    {
+        $query = "DELETE FROM USER WHERE login = $user->login";
+        
+
     }
 
     private function connectToDB(): void
@@ -93,6 +104,15 @@ class Database {
             $result = $this->db->exec($query);
         } catch (\Throwable $th) {
             Error::fourOFour("Couldnt create table");
+        }
+    }
+
+    private function queryDB(string $query, string $msg = null)
+    {
+        try {
+            $this->db->exec($query);
+        } catch (\Throwable $th) {
+            
         }
     }
 

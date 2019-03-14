@@ -8,3 +8,4 @@ If you are using xampp as me you can do this changes in httpd.conf.
 
 // TODO
     - add logs to server
+    - clear code (added queryDB function)

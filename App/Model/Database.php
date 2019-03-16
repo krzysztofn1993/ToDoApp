@@ -11,15 +11,13 @@ class Database {
     private $db = null;
     private $localhost = 'localhost';
     private $dbPassword = '';
-    private $dbUser = 'root';
-    private $user;
+    private $dbUser = '';
     private static $instance = null;
 
     private function __construct()
     {       
         $this->connectToDB();
         $this->createUsersTableIfNotExists();
-        $this->user = new User;
     }
 
     public static function getInstance()
@@ -33,7 +31,7 @@ class Database {
 
     public function registerUser(user $user): bool
     {
-        if ($this->canRegister($user->login)) {
+        if ($this->canRegister($user->getLogin())) {
 
             return $this->insertUserToDataBase($user);    
         } else {
@@ -44,18 +42,23 @@ class Database {
 
     private function canRegister(string $login): bool
     {
-        $query = 'SELECT * FROM users WHERE user = $login';
-        $result = $this->db->exec($query);
-
-        return $result > 0? true : false;
+        $query = 'SELECT * FROM User WHERE LOGIN = \'' . $login . '\'';
+        $result = $this->queryDB($query);
+        
+        return $result === 0 ? true : false;
     }
 
     private function insertUserToDataBase(user $user): bool
     {
-        $query = "INSERT INTO USER VALUES" .
-            "($user->login, $user->password, $user->date)";
+        $query = 'INSERT INTO User (ID, LOGIN, PASSWORD, DATE) VALUES' .
+            '(' . 0 . ', ' .
+            '\'' . $user->getlogin() . '\', ' . 
+            '\'' . $user->getPassword() . '\', ' .
+            '\'' . $user->getDate() .  '\')';
         try {
-            $this->db->exec($query);
+            $result = $this->queryDB($query);
+            $this->checkIfUserAdded($user);            
+            return $result;
         } catch (\Throwable $th) {
             if ($this->checkIfUserAdded($user)) {
                 $this->rollBackAddedUser($user);
@@ -67,19 +70,14 @@ class Database {
 
     private function checkIfUserAdded(user $user)
     {
-        $query = "SELECT * FROM USER WHERE login = $user->login";
-        try {
-            $this->db->exec($query);
-        } catch (\Throwable $th) {
-            Error::fourOFour("Error while checking if User was added");
-        }
+        $query = 'SELECT * FROM User WHERE login = "' . $user->getLogin() . '"';
+        return $this->queryDB($query, "Error while checking if User was added");
     }
 
     private function rollBackAddedUser(user $user)
     {
-        $query = "DELETE FROM USER WHERE login = $user->login";
-        
-
+        $query = "DELETE FROM User WHERE login = $user->login";
+        $this->queryDB($query, "Error while deleting badly added user");
     }
 
     private function connectToDB(): void
@@ -100,28 +98,29 @@ class Database {
         } catch (\Throwable $th) {
             Error::fourOFour("Couldnt connect to host of DATABASES!");
         }
-        try {
-            $result = $this->db->exec($query);
-        } catch (\Throwable $th) {
-            Error::fourOFour("Couldnt create table");
-        }
+        $this->queryDB($query, "Couldnt create table");
     }
 
     private function queryDB(string $query, string $msg = null)
     {
+        $this->connectToDB();
         try {
-            $this->db->exec($query);
+            $result = $this->db->exec($query);
+            return $result;
         } catch (\Throwable $th) {
-            
+            Error::fourOFour($msg);
         }
+        $this->db = null;
     }
 
     private function selectDB()
     {
+        $query = "mysql:host=$this->localhost;dbname=$this->dbName";
         $this->db = new \PDO(
-            "mysql:host=$this->localhost;dbname=$this->dbName", 
+            $query, 
             $this->dbUser, 
             $this->dbPassword);
+        return true;
     }
 
     private function createUsersTableIfNotExists(): void
@@ -133,7 +132,7 @@ class Database {
             'DATE DATE,' .
             'PRIMARY KEY (ID))';
         try {
-            $this->db->exec($query);
+            $result = $this->db->exec($query);
         } catch (\Throwable $th) {
             Error::fourOFour("Couldnt create table");
         }

@@ -24,9 +24,9 @@ class Register {
     
     public function check()
     { 
-        $this->user->login = $_POST['login'];
-        $this->user->password = $_POST['password'];
-        $this->user->date = date("Y-m-d H:i:s");
+        $this->user->setLogin($_POST['login']);
+        $this->user->setPassword($_POST['password']);
+        $this->user->setDate();
         unset($_POST);
         $this->dataBase->registerUser($this->user);
     }

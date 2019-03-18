@@ -32,7 +32,6 @@ class Database {
     public function registerUser(user $user): bool
     {
         if ($this->canRegister($user->getLogin())) {
-
             return $this->insertUserToDataBase($user);    
         } else {
 
@@ -43,9 +42,9 @@ class Database {
     private function canRegister(string $login): bool
     {
         $query = 'SELECT * FROM User WHERE LOGIN = \'' . $login . '\'';
-        $result = $this->queryDB($query);
+        $result = $this->selectFromDatabase($query, "Something happened when checking if can register User");
         
-        return $result === 0 ? true : false;
+        return empty($result) ? true : false;
     }
 
     private function insertUserToDataBase(user $user): bool
@@ -71,15 +70,15 @@ class Database {
     private function checkIfUserAdded(user $user)
     {
         $query = 'SELECT * FROM User WHERE login = "' . $user->getLogin() . '"';
-        return $this->queryDB($query, "Error while checking if User was added");
+        return $this->selectFromDatabase($query, "Error while checking if User was added");
     }
-
+    
     private function rollBackAddedUser(user $user)
     {
         $query = "DELETE FROM User WHERE login = $user->login";
         $this->queryDB($query, "Error while deleting badly added user");
     }
-
+    
     private function connectToDB(): void
     {
         try {
@@ -89,7 +88,7 @@ class Database {
             $this->selectDB();
         }
     }
-
+    
     private function createDB(): void
     {
         $query = "CREATE DATABASE IF NOT EXISTS $this->dbName";
@@ -100,19 +99,19 @@ class Database {
         }
         $this->queryDB($query, "Couldnt create table");
     }
-
+    
     private function queryDB(string $query, string $msg = null)
     {
         $this->connectToDB();
         try {
             $result = $this->db->exec($query);
+            $this->db = null;
             return $result;
         } catch (\Throwable $th) {
             Error::fourOFour($msg);
         }
-        $this->db = null;
     }
-
+    
     private function selectDB()
     {
         $query = "mysql:host=$this->localhost;dbname=$this->dbName";
@@ -120,24 +119,36 @@ class Database {
             $query, 
             $this->dbUser, 
             $this->dbPassword);
-        return true;
-    }
-
-    private function createUsersTableIfNotExists(): void
-    {
-        $query = 'CREATE TABLE IF NOT EXISTS User(' .
+            return true;
+        }
+        
+        private function createUsersTableIfNotExists(): void
+        {
+            $query = 'CREATE TABLE IF NOT EXISTS User(' .
             'ID INT NOT NULL AUTO_INCREMENT,' .
             'LOGIN VARCHAR(30)  NOT NULL,' .
             'PASSWORD VARCHAR(255) NOT NULL,' .
             'DATE DATE,' .
             'PRIMARY KEY (ID))';
-        try {
-            $result = $this->db->exec($query);
-        } catch (\Throwable $th) {
-            Error::fourOFour("Couldnt create table");
+            try {
+                $result = $this->db->exec($query);
+            } catch (\Throwable $th) {
+                Error::fourOFour("Couldnt create table");
+            }
+        }
+        
+        public function selectFromDatabase (string $query, string $msg)
+        {
+            $this->connectToDB();
+            try {
+                $result = $this->db->query($query);
+                $result = $result->fetchAll();
+                $this->db = null;
+                return $result;
+            } catch (\Throwable $th) {
+                Error::fourOFour($msg);
+            }
         }
     }
-}
-
-
-?>
+    
+    ?>

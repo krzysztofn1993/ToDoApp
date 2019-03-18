@@ -28,7 +28,12 @@ class Register {
         $this->user->setPassword($_POST['password']);
         $this->user->setDate();
         unset($_POST);
-        $this->dataBase->registerUser($this->user);
+        if ($this->dataBase->registerUser($this->user)) {
+            header('Location: /Projects/ToDoApp/public/');
+        }
+        else {
+            header('Location: /Projects/ToDoApp/public/register/');
+        }
     }
 
 }

@@ -52,7 +52,7 @@ class Database {
         $query = 'INSERT INTO User (ID, LOGIN, PASSWORD, DATE) VALUES' .
             '(' . 0 . ', ' .
             '\'' . $user->getlogin() . '\', ' . 
-            '\'' . $user->getPassword() . '\', ' .
+            '\'' . $user->getHashedPassword() . '\', ' .
             '\'' . $user->getDate() .  '\')';
         try {
             $result = $this->queryDB($query);
@@ -88,6 +88,17 @@ class Database {
             $this->selectDB();
         }
     }
+
+    public function login(user $user): bool
+    {
+        $query =  'SELECT * FROM USER WHERE LOGIN =\'' . $user->getLogin() . '\'';
+        if (empty($this->selectFromDatabase($query))) {
+            return true;
+        }
+        return false;
+    }
+
+    
     
     private function createDB(): void
     {
@@ -120,35 +131,35 @@ class Database {
             $this->dbUser, 
             $this->dbPassword);
             return true;
-        }
+    }
         
-        private function createUsersTableIfNotExists(): void
-        {
-            $query = 'CREATE TABLE IF NOT EXISTS User(' .
-            'ID INT NOT NULL AUTO_INCREMENT,' .
-            'LOGIN VARCHAR(30)  NOT NULL,' .
-            'PASSWORD VARCHAR(255) NOT NULL,' .
-            'DATE DATE,' .
-            'PRIMARY KEY (ID))';
-            try {
-                $result = $this->db->exec($query);
-            } catch (\Throwable $th) {
-                Error::fourOFour("Couldnt create table");
-            }
-        }
-        
-        public function selectFromDatabase (string $query, string $msg)
-        {
-            $this->connectToDB();
-            try {
-                $result = $this->db->query($query);
-                $result = $result->fetchAll();
-                $this->db = null;
-                return $result;
-            } catch (\Throwable $th) {
-                Error::fourOFour($msg);
-            }
+    private function createUsersTableIfNotExists(): void
+    {
+        $query = 'CREATE TABLE IF NOT EXISTS User(' .
+        'ID INT NOT NULL AUTO_INCREMENT,' .
+        'LOGIN VARCHAR(30)  NOT NULL,' .
+        'PASSWORD VARCHAR(255) NOT NULL,' .
+        'DATE DATETIME,' .
+        'PRIMARY KEY (ID))';
+        try {
+            $result = $this->db->exec($query);
+        } catch (\Throwable $th) {
+            Error::fourOFour("Couldnt create table");
         }
     }
     
-    ?>
+    public function selectFromDatabase (string $query, string $msg = null)
+    {
+        $this->connectToDB();
+        try {
+            $result = $this->db->query($query);
+            $result = $result->fetchAll();
+            $this->db = null;
+            return $result;
+        } catch (\Throwable $th) {
+            Error::fourOFour($msg);
+        }
+    }
+}
+    
+?>

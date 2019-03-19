@@ -6,12 +6,9 @@ class User {
 
     private $id;
     private $login;
+    private $hashed_password;
     private $password;
     private $date;
-
-    public function getUser($login = null) 
-    {
-    }
 
     public function getID(): string 
     {
@@ -39,6 +36,16 @@ class User {
     public function setPassword(string $password)
     {
         $this->password = $password;
+        $this->setHashedPassword($password);
+    }
+    public function getHashedPassword(): string 
+    {
+        return $this->hashed_password;
+    }
+
+    public function setHashedPassword(string $password)
+    {
+        $this->hashed_password = password_hash($password, PASSWORD_DEFAULT);
     }
     public function getDate(): string 
     {

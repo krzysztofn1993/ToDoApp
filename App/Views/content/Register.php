@@ -22,7 +22,7 @@ require_once('../App/Views/common/head.php');
             <div class="row d-flex justify-content-center my-2">
                 <input type="submit" value="Register"
                  class="btn btn-success border border-dark text-dark mx-2">
-                 <a class="btn btn-secondary border border-dark text-dark mx-2" href="../public/">
+                 <a class="btn btn-secondary border border-dark text-dark mx-2" href="/Projects/ToDoApp/public/">
                  Go to Login</a>
             </div>
         </form>

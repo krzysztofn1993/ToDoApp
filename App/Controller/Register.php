@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Model\User;
 use App\Model\Database;
+use App\Model\User;
 
 
 class Register {

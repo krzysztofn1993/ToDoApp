@@ -8,7 +8,7 @@ require_once('../App/Views/common/head.php');
         <h1>Welcome!<br> ToDoApp</h1>
     </div>
     <div class="row">
-        <form action="./app" method="POST" autocomplete="off">
+        <form action="/Projects/ToDoApp/public/login/check" method="POST" autocomplete="off">
             <div class="row d-flex align-items-center justify-content-center">
                 <label for="login"></label>
                 <input type="text" name="login" id="login" required autocomplete="off" 

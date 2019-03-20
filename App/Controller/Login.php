@@ -24,18 +24,28 @@ class Login {
         $this->user->setDate();
         unset($_POST);
         if ($this->dataBase->login($this->user)) {
-            $this->setUserLoggedSessionAndCookies();
+            $this->setUserLoggedSession($this->user);
             header('Location: /Projects/ToDoApp/public/');
         }
         else {
-            $this->setUserBadLogin-SessionAndCookies();
+            $this->setUserBadLoginSession();
             header('Location: /Projects/ToDoApp/public/');
         }
     }
-
-
-
+    
+    private function setUserLoggedSession()
+    {
+        $_SERVER['PHP_AUTH_USER'] = $this->getLogin();
+        $_SERVER['PHP_AUTH_PW'] = $this->getHashedPassword();
+    }
+    
+    private function setUserBadLoginSession()
+    {
+        if (isset($_SERVER['PHP_AUTH_USER']) &&  isset($_SERVER['PHP_AUTH_PW'])) {
+            unset($_SERVER['PHP_AUTH_USER']);
+            unset($_SERVER['PHP_AUTH_PW']);
+        }
+    }
 }
-
 
 ?>

@@ -1,0 +1,16 @@
+{
+    "name": "krzyniu/to-do-app",
+    "description": "First mvc php ToDoApp project",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "twbs/bootstrap": "4.3.1"
+    },
+    
+    "autoload": {
+        "psr-4": {
+             "Core\\": "Core/",
+             "App\\": "App/"
+        }
+    }
+}

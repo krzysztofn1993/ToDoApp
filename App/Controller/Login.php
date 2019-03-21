@@ -33,10 +33,10 @@ class Login {
         }
     }
     
-    private function setUserLoggedSession()
+    private function setUserLoggedSession(user $user)
     {
-        $_SERVER['PHP_AUTH_USER'] = $this->getLogin();
-        $_SERVER['PHP_AUTH_PW'] = $this->getHashedPassword();
+        $_SERVER['PHP_AUTH_USER'] = $user->getLogin();
+        $_SERVER['PHP_AUTH_PW'] = $user->getHashedPassword();
     }
     
     private function setUserBadLoginSession()

@@ -22,7 +22,6 @@ class Login {
         $this->user->setLogin($_POST['login']);
         $this->user->setPassword($_POST['password']);
         $this->user->setDate();
-        unset($_POST);
         if ($this->dataBase->login($this->user)) {
             $this->setUserLoggedSession($this->user);
             header('Location: /Projects/ToDoApp/public/');
@@ -35,8 +34,8 @@ class Login {
     
     private function setUserLoggedSession(user $user)
     {
-        $_SERVER['PHP_AUTH_USER'] = $user->getLogin();
-        $_SERVER['PHP_AUTH_PW'] = $user->getHashedPassword();
+        $_SESSION['user'] = $user->getLogin();
+        $_SESSION['pw'] = $user->getHashedPassword();
     }
     
     private function setUserBadLoginSession()

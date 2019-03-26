@@ -92,7 +92,7 @@ class Database {
     public function login(user $user): bool
     {
         $query =  'SELECT * FROM USER WHERE LOGIN =\'' . $user->getLogin() . '\'';
-        if (empty($this->selectFromDatabase($query))) {
+        if (!empty($this->selectFromDatabase($query))) {
             return true;
         }
         return false;

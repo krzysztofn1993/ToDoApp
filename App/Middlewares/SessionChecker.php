@@ -5,7 +5,6 @@ namespace App\Middlewares\SessionChecker;
 class SessionChecker {
 
     private static $instance = null;
-    private $lastAction = null;
 
     private function _construct()
     {
@@ -22,28 +21,24 @@ class SessionChecker {
     }
 
     public function sessionCheck(){
-        if(wasActive()) {
-            $this->sessionUpdate();
-        } else {
-
-        }
+        $this->setSession();
+        $this->checkLastTime();
     }
     
-    public function sessionUpdate()
+    private function setSession()
     {
-        if(isset($_SESSION['time'])) {
-            $this->lastAction = time();
+        if (isset($_SESSION['lastActionTime'])) {
             return;
         }
-        $_SESSION['time'] = time();
-        $this->lastAction = time();
+        $_SESSION['lastActionTime'] = time();
     }
-
-    public function wasActive()
+    
+    private function checkLastTime()
     {
-        if(time() - $this->lastAction > 60*15) {
-            
+        if(time() - $_SESSION['lastActionTime'] > 60*30) {
+            session_unset();
         }
+        $_SESSION['lastActionTime'] = time();
     }
 }
 

@@ -3,11 +3,26 @@
 namespace Core;
 
 use App\Helpers\Error;
+use App\Middlewares\SessionChecker\SessionChecker;
 
 class Router {
 
     protected $controller = 'App\Controller\Home';
     protected $method = 'index';
+    private static $instance = null;
+    private $session = null;
+
+    private function _construct()
+    {
+    }
+    
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new Router;
+        }
+        return self::$instance;
+    }
 
     public function goTo($url)
     {
@@ -26,7 +41,7 @@ class Router {
         }
     }
 
-    protected function createControllerNamespace(string $url) : string
+    private function createControllerNamespace(string $url) : string
     {
         preg_match('/(\w+)\/?/', $url, $matches);
         $this->controller = preg_replace('/(\w+)$/', ucfirst(strtolower($matches[1])) , $this->controller);
@@ -34,7 +49,7 @@ class Router {
         return $this->controller;
     }
 
-    protected function checkIfControllerExists() : bool
+    private function checkIfControllerExists() : bool
     {
         if(class_exists($this->controller)) {
 
@@ -44,7 +59,7 @@ class Router {
         }
     }
     
-    protected function checkIfMethodExists($url) : bool
+    private function checkIfMethodExists($url) : bool
     {
         if (preg_match('/\/(\w+)\/?/', $url, $matches) == true ) {
             $this->method = $matches[1];
@@ -62,13 +77,13 @@ class Router {
         }
     }
     
-    protected function callPage()
+    private function callPage()
     {
         $this->controller = new $this->controller;
         call_user_func([$this->controller, $this->method]);
     }
 
-    protected function sanitizeURL(string $url) : string
+    private function sanitizeURL(string $url) : string
     {
         $url = trim($url);
         return $url; 

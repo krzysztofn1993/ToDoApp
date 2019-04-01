@@ -5,6 +5,7 @@ namespace App\Middlewares\SessionChecker;
 class SessionChecker {
 
     private static $instance = null;
+    private $minutes = 1;
 
     private function _construct()
     {
@@ -35,7 +36,7 @@ class SessionChecker {
     
     private function checkLastTime()
     {
-        if(time() - $_SESSION['lastActionTime'] > 60*30) {
+        if(time() - $_SESSION['lastActionTime'] > 60*$this->minutes) {
             session_unset();
         }
         $_SESSION['lastActionTime'] = time();

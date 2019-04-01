@@ -9,15 +9,23 @@ class User {
     private $hashed_password;
     private $password;
     private $date;
+    private $dataBase;
+
+    public function __construct()
+    {
+        $this->dataBase = Database::getInstance();
+    }
 
     public function getID(): string 
     {
         return $this->id;
     }
 
-    public function setID(int $id)
+    public function setID(string $login)
     {
-        $this->id = $id;
+        $sql = 'SELECT USER_ID FROM Users WHERE LOGIN =' . $login;
+        $this->id = $this->dataBase->queryDB($sql);
+        
     }
     public function getLogin(): string 
     {

@@ -18,6 +18,7 @@ class Database {
     {       
         $this->connectToDB();
         $this->createUsersTableIfNotExists();
+        $this->createTasksTableIfNotExists();
     }
 
     public static function getInstance()
@@ -41,7 +42,7 @@ class Database {
 
     private function canRegister(string $login): bool
     {
-        $query = 'SELECT * FROM User WHERE LOGIN = \'' . $login . '\'';
+        $query = 'SELECT * FROM Users WHERE LOGIN = \'' . $login . '\'';
         $result = $this->selectFromDatabase($query, "Something happened when checking if can register User");
         
         return empty($result) ? true : false;
@@ -49,14 +50,15 @@ class Database {
 
     private function insertUserToDataBase(user $user): bool
     {
-        $query = 'INSERT INTO User (ID, LOGIN, PASSWORD, DATE) VALUES' .
+        $query = 'INSERT INTO Users (USER_ID, LOGIN, PASSWORD, DATE) VALUES' .
             '(' . 0 . ', ' .
             '\'' . $user->getlogin() . '\', ' . 
             '\'' . $user->getHashedPassword() . '\', ' .
             '\'' . $user->getDate() .  '\')';
         try {
             $result = $this->queryDB($query);
-            $this->checkIfUserAdded($user);            
+            $this->checkIfUserAdded($user);      
+
             return $result;
         } catch (\Throwable $th) {
             if ($this->checkIfUserAdded($user)) {
@@ -69,13 +71,13 @@ class Database {
 
     private function checkIfUserAdded(user $user)
     {
-        $query = 'SELECT * FROM User WHERE login = "' . $user->getLogin() . '"';
+        $query = 'SELECT * FROM Users WHERE login = "' . $user->getLogin() . '"';
         return $this->selectFromDatabase($query, "Error while checking if User was added");
     }
     
     private function rollBackAddedUser(user $user)
     {
-        $query = "DELETE FROM User WHERE login = $user->login";
+        $query = "DELETE FROM Users WHERE login = $user->login";
         $this->queryDB($query, "Error while deleting badly added user");
     }
     
@@ -91,15 +93,13 @@ class Database {
 
     public function login(user $user): bool
     {
-        $query =  'SELECT * FROM USER WHERE LOGIN =\'' . $user->getLogin() . '\'';
+        $query =  'SELECT * FROM USERS WHERE LOGIN =\'' . $user->getLogin() . '\'';
         if (!empty($this->selectFromDatabase($query))) {
             return true;
         }
         return false;
     }
 
-    
-    
     private function createDB(): void
     {
         $query = "CREATE DATABASE IF NOT EXISTS $this->dbName";
@@ -111,7 +111,7 @@ class Database {
         $this->queryDB($query, "Couldnt create table");
     }
     
-    private function queryDB(string $query, string $msg = null)
+    public function queryDB(string $query, string $msg = null)
     {
         $this->connectToDB();
         try {
@@ -135,16 +135,34 @@ class Database {
         
     private function createUsersTableIfNotExists(): void
     {
-        $query = 'CREATE TABLE IF NOT EXISTS User(' .
-        'ID INT NOT NULL AUTO_INCREMENT,' .
+        $query = 'CREATE TABLE IF NOT EXISTS Users(' .
+        'USER_ID INT NOT NULL AUTO_INCREMENT,' .
         'LOGIN VARCHAR(30)  NOT NULL,' .
         'PASSWORD VARCHAR(255) NOT NULL,' .
         'DATE DATETIME,' .
-        'PRIMARY KEY (ID))';
+        'PRIMARY KEY (USER_ID))';
         try {
-            $result = $this->db->exec($query);
+            $result = $this->queryDB($query);
         } catch (\Throwable $th) {
-            Error::fourOFour("Couldnt create table");
+            Error::fourOFour("Couldnt create users table");
+        }
+    }
+
+    private function createTasksTableIfNotExists()
+    {
+        $query = 'CREATE TABLE IF NOT EXISTS Tasks(' .
+        'ID INT NOT NULL AUTO_INCREMENT,' .
+        'USER_ID INT,' .
+        'TASK VARCHAR(1000) NOT NULL,' .
+        'DONE BOOLEAN,' .
+        'DATA_DODANIA DATETIME,' .
+        'DATA_MODYFIKACJI DATETIME,' .
+        'PRIMARY KEY (ID),' .
+        'UNIQUE (USER_ID))';
+        try {
+            $result = $this->queryDB($query);
+        } catch (\Throwable $th) {
+            Error::fourOFour("Couldnt create tasks table");
         }
     }
     

@@ -19,11 +19,13 @@ class Login {
 
     public function check()
     {
+        // to entity
         $this->user->setLogin($_POST['login']);
         $this->user->setPassword($_POST['password']);
         $this->user->setDate();
 
         if ($this->dataBase->login($this->user)) {
+            $this->user->setID($_POST['login']);
             $this->setUserLoggedSession($this->user);
             header('Location: /Projects/ToDoApp/public/');
         }
@@ -36,8 +38,7 @@ class Login {
     private function setUserLoggedSession(user $user)
     {
         $_SESSION['lastActionTime'] = time();
-        $_SESSION['user'] = $user->getLogin();
-        $_SESSION['pw'] = $user->getHashedPassword();
+        $_SESSION['U_ID'] = $user->getID();
     }
     
     private function setUserBadLoginSession()

@@ -11,10 +11,6 @@ class Router {
     protected $method = 'index';
     private static $instance = null;
     private $session = null;
-
-    private function _construct()
-    {
-    }
     
     public static function getInstance()
     {

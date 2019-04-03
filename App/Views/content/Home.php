@@ -1,6 +1,7 @@
 <?php
 $title = "Home Page";
-require_once('../App/Views/common/head.php');?>
+require_once('../App/Views/common/head.php');
+?>
 <body class="bg-primary vh-100">
 <?php
 if(isset($_SESSION['U_ID'])){

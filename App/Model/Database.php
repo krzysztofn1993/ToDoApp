@@ -35,7 +35,6 @@ class Database {
         if ($this->canRegister($user->getLogin())) {
             return $this->insertUserToDataBase($user);    
         } else {
-
             return false;
         }
     }
@@ -43,7 +42,7 @@ class Database {
     private function canRegister(string $login): bool
     {
         $query = 'SELECT * FROM Users WHERE LOGIN = \'' . $login . '\'';
-        $result = $this->selectFromDatabase($query, "Something happened when checking if can register User");
+        $result = $this->selectFromDaabase($query, "Something happened when checking if can register User");
         
         return empty($result) ? true : false;
     }
@@ -67,6 +66,34 @@ class Database {
         }
 
         return true;
+    }
+
+    public function getUserTasks(string $id): ?array
+    {
+        $sql = 'SELECT TASK FROM TASKS WHERE USER_ID =\'' . $id . '\';';
+        
+        return  $this->selectFromDatabase($sql, 'Error while searching for user tasks');
+    }
+
+    public function addTask(string $task, string $id)
+    {
+        // $task = $this->sanitizeTask($task);
+        if ($task !== null && $task !== '') {
+            $sql = '
+            INSERT INTO Tasks(USER_ID, TASK, DONE, CREATION_DATE, MODIFICATION_DATE) VALUES' .
+            '(' . $id . 
+            ',\' ' . $task . '\'' .
+            ', ' . 0 . 
+            ',\' ' . date("Y-m-d H:i:s") . '\''. 
+            ',\' ' . date("Y-m-d H:i:s") . '\''. 
+            ')';
+
+            try{
+                $result = $this->queryDB($sql);
+            } catch(\Throwable $th) {
+
+            }
+        }
     }
 
     private function checkIfUserAdded(user $user)
@@ -155,10 +182,9 @@ class Database {
         'USER_ID INT,' .
         'TASK VARCHAR(1000) NOT NULL,' .
         'DONE BOOLEAN,' .
-        'DATA_DODANIA DATETIME,' .
-        'DATA_MODYFIKACJI DATETIME,' .
-        'PRIMARY KEY (ID),' .
-        'UNIQUE (USER_ID))';
+        'CREATION_DATE DATETIME,' .
+        'MODIFICATION_DATE DATETIME,' .
+        'PRIMARY KEY (ID))';
         try {
             $result = $this->queryDB($query);
         } catch (\Throwable $th) {

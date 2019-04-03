@@ -23,7 +23,7 @@ class User {
 
     public function setID(string $login)
     {
-        $sql = 'SELECT USER_ID FROM Users WHERE LOGIN =' . $login;
+        $sql = 'SELECT USER_ID FROM Users WHERE LOGIN =\'' . $login . '\'';
         $this->id = $this->dataBase->queryDB($sql);
         
     }

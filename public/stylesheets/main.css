@@ -2,4 +2,8 @@
   text-align: center;
 }
 
+.row {
+  display: flex !important;
+}
+
 /*# sourceMappingURL=main.css.map */

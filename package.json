@@ -1,0 +1,31 @@
+{
+  "name": "todoapp",
+  "version": "1.0.0",
+  "description": "ToDoApp. Things used: PHP, MySQL, composer, npm, bootstrap etc.",
+  "main": "/public/scripts/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krzysztofn1993/ToDoApp.git"
+  },
+  "keywords": [
+    "todo",
+    "to",
+    "do",
+    "to",
+    "do",
+    "app",
+    "todoapp"
+  ],
+  "author": "Krzysztof Nowak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krzysztofn1993/ToDoApp/issues"
+  },
+  "homepage": "https://github.com/krzysztofn1993/ToDoApp#readme",
+  "dependencies": {
+    "pretty-checkbox": "^3.0.3"
+  }
+}

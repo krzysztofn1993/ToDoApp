@@ -13,9 +13,20 @@ col-md-8">
     <?php
     if (!empty($tasks)) {
         
-        echo '<ul class="list-group my-4 tasks">';
+        echo '<ul class="list-group container my-4 tasks">';
         foreach ($tasks as $task) {
-            echo '<li class="list-group-item my-1 tasks__position">' . ucfirst($task['TASK']) . '</li>';
+            echo '<li class="list-group-item row my-1 tasks__position">' .
+                    '<div class="col-lg-12">' .
+                        ucfirst($task['TASK']) .
+                    '</div>' . 
+                    '<div class="done">' .
+                    '<label for="done"></label>' .
+                    '<input type="checkbox" name="done" id="done">' .
+                    '</div>' .
+                    '<div class="delete">' .
+                    '<label for="delete"></label>' .
+                    '<input type="checkbox" name="delete" id="delete">' .
+                    '</div>';
         }
         echo '</ul>';
     }

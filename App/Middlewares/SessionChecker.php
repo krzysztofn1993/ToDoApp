@@ -5,7 +5,7 @@ namespace App\Middlewares\SessionChecker;
 class SessionChecker {
 
     private static $instance = null;
-    private $minutes = 1;
+    private $minutes = 100;
 
     private function _construct()
     {

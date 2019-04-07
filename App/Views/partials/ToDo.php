@@ -1,3 +1,4 @@
+<?php require_once('../App/Views/common/header.php')?>
 <div class="d-flex flex-column container container-fluid justify-content-center my-5 col-lg-7
 col-md-8">
     <form action="Home/addTask" method="POST">

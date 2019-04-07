@@ -21,7 +21,7 @@ class Database {
         $this->createTasksTableIfNotExists();
     }
 
-    public static function getInstance()
+    public static function getInstance(): Database
     {
         if (self::$instance === null) {
             self::$instance = new Database;
@@ -42,7 +42,7 @@ class Database {
     private function canRegister(string $login): bool
     {
         $query = 'SELECT * FROM Users WHERE LOGIN = \'' . $login . '\'';
-        $result = $this->selectFromDaabase($query, "Something happened when checking if can register User");
+        $result = $this->selectFromDatabase($query, "Something happened when checking if can register User");
         
         return empty($result) ? true : false;
     }
@@ -75,7 +75,7 @@ class Database {
         return  $this->selectFromDatabase($sql, 'Error while searching for user tasks');
     }
 
-    public function addTask(string $task, string $id)
+    public function addTask(string $task, string $id): void
     {
         // $task = $this->sanitizeTask($task);
         if ($task !== null && $task !== '') {
@@ -96,13 +96,13 @@ class Database {
         }
     }
 
-    private function checkIfUserAdded(user $user)
+    private function checkIfUserAdded(user $user): ?array
     {
         $query = 'SELECT * FROM Users WHERE login = "' . $user->getLogin() . '"';
         return $this->selectFromDatabase($query, "Error while checking if User was added");
     }
     
-    private function rollBackAddedUser(user $user)
+    private function rollBackAddedUser(user $user): void
     {
         $query = "DELETE FROM Users WHERE login = $user->login";
         $this->queryDB($query, "Error while deleting badly added user");
@@ -138,7 +138,7 @@ class Database {
         $this->queryDB($query, "Couldnt create table");
     }
     
-    public function queryDB(string $query, string $msg = null)
+    public function queryDB(string $query, string $msg = null): bool
     {
         $this->connectToDB();
         try {
@@ -150,14 +150,14 @@ class Database {
         }
     }
     
-    private function selectDB()
+    private function selectDB(): bool
     {
         $query = "mysql:host=$this->localhost;dbname=$this->dbName";
         $this->db = new \PDO(
             $query, 
             $this->dbUser, 
             $this->dbPassword);
-            return true;
+        return true;
     }
         
     private function createUsersTableIfNotExists(): void
@@ -175,7 +175,7 @@ class Database {
         }
     }
 
-    private function createTasksTableIfNotExists()
+    private function createTasksTableIfNotExists(): void
     {
         $query = 'CREATE TABLE IF NOT EXISTS Tasks(' .
         'ID INT NOT NULL AUTO_INCREMENT,' .
@@ -192,7 +192,7 @@ class Database {
         }
     }
     
-    public function selectFromDatabase (string $query, string $msg = null)
+    public function selectFromDatabase (string $query, string $msg = null): array
     {
         $this->connectToDB();
         try {

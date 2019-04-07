@@ -24,8 +24,8 @@ class User {
     public function setID(string $login)
     {
         $sql = 'SELECT USER_ID FROM Users WHERE LOGIN =\'' . $login . '\'';
-        $this->id = $this->dataBase->queryDB($sql);
-        
+        $response = $this->dataBase->selectFromDatabase($sql);
+        $this->id = $response[0]['USER_ID'];
     }
     public function getLogin(): string 
     {

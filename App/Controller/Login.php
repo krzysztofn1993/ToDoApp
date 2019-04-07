@@ -32,6 +32,12 @@ class Login {
         }
     }
     
+    public function logout()
+    {
+        session_unset();
+        header('Location: /Projects/ToDoApp/public/');
+    }
+
     private function setUserLoggedSession()
     {
         $_SESSION['lastActionTime'] = time();

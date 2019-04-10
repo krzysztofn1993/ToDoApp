@@ -6,4 +6,24 @@
   display: flex !important;
 }
 
+.done {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tasks__positions {
+  position: relative;
+  background: white;
+  min-height: 38px;
+  border-radius: 0 0.25rem 0.25rem 0;
+  margin-left: 0 !important;
+}
+.tasks__text {
+  word-break: break-all;
+}
+.tasks__done {
+  border-radius: 0 0.15rem 0.15rem 0;
+  padding: 1px 6px;
+}
+
 /*# sourceMappingURL=main.css.map */

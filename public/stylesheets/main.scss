@@ -5,3 +5,25 @@
 .row {
     display: flex !important;
 }
+
+.done {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.tasks{
+    &__positions {
+        position: relative;
+        background: white;
+        min-height: 38px;
+        border-radius: 0 0.25rem 0.25rem 0;
+        margin-left: 0 !important;
+    }
+    &__text {
+        word-break: break-all;
+    }
+    &__done {
+        border-radius: 0 0.15rem 0.15rem 0;
+        padding: 1px 6px;
+    }
+}

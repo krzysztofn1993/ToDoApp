@@ -8,7 +8,7 @@ require_once('../App/Views/common/head.php');
         <h1 class="my-4">Register</h1>
     </div>
     <div class="row">
-        <form action="/Projects/ToDoApp/public/register/check" method="POST" autocomplete="off">
+        <form action="register/check" method="POST" autocomplete="off">
             <div class="row d-flex align-items-center justify-content-center">
                 <label for="login"></label>
                 <input type="text" name="login" id="login" required autocomplete="off" 
@@ -22,7 +22,7 @@ require_once('../App/Views/common/head.php');
             <div class="row d-flex justify-content-center my-2">
                 <input type="submit" value="Register"
                  class="btn btn-success border border-dark text-dark mx-2">
-                 <a class="btn btn-secondary border border-dark text-dark mx-2" href="/Projects/ToDoApp/public/">
+                 <a class="btn btn-secondary border border-dark text-dark mx-2" href="../public/">
                  Go to Login</a>
             </div>
         </form>

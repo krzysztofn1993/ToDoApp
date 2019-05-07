@@ -41,43 +41,45 @@ class Database {
 
     private function canRegister(string $login): bool
     {
-        $query = 'SELECT * FROM Users WHERE LOGIN = \'' . $login . '\'';
-        $result = $this->selectFromDatabase($query, "Something happened when checking if can register User");
-        
-        return empty($result) ? true : false;
+        $this->connectToDB();
+
+        $sql = $this->db->prepare('SELECT * FROM Users WHERE LOGIN = :login');
+        $sql->bindValue(':login', $login);
+        $done = $sql->execute();
+        $result = $sql->fetchAll();
+        $this->db = null;
+
+        return empty($result);
     }
 
     private function insertUserToDataBase(user $user): bool
     {
-        $query = 'INSERT INTO Users (USER_ID, LOGIN, PASSWORD, DATE) VALUES' .
-            '(' . 0 . ', ' .
-            '\'' . $user->getlogin() . '\', ' . 
-            '\'' . $user->getHashedPassword() . '\', ' .
-            '\'' . $user->getDate() .  '\')';
-        try {
-            $result = $this->queryDB($query);
-            $this->checkIfUserAdded($user);      
+        $this->connectToDB();
 
-            return $result;
-        } catch (\Throwable $th) {
-            if ($this->checkIfUserAdded($user)) {
-                $this->rollBackAddedUser($user);
-            }
-        }
+        $sql = $this->db->prepare('INSERT INTO Users (USER_ID, LOGIN, PASSWORD, DATE) VALUES' .
+            '(:user_id, :login, :hashed_password, :date)');
+        $sql->bindValue(':user_id', 0);
+        $sql->bindValue(':login', $user->getLogin());
+        $sql->bindValue(':hashed_password', $user->getHashedPassword());
+        $sql->bindValue(':date', $user->getDate());
 
-        return true;
+        return $sql->execute();
+        
     }
 
-    public function getUserTasks(string $id): ?array
+    public function getUserTasks(string $user_id): ?array
     {
-        $sql = 'SELECT TASK FROM TASKS WHERE USER_ID =\'' . $id . '\';';
-        
-        return  $this->selectFromDatabase($sql, 'Error while searching for user tasks');
+        $this->connectToDB();
+
+        $sql = $this->db->prepare('SELECT TASK FROM TASKS WHERE USER_ID = :user_id;');
+        $sql->bindValue(':user_id', $user_id);
+        $sql->execute();
+
+        return  $sql->fetchAll();
     }
 
     public function addTask(string $task, string $id): void
     {
-        // $task = $this->sanitizeTask($task);
         if ($task !== null && $task !== '') {
             $sql = '
             INSERT INTO Tasks(USER_ID, TASK, DONE, CREATION_DATE, MODIFICATION_DATE) VALUES' .

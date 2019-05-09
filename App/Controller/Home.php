@@ -26,7 +26,13 @@ class Home {
     {
         $task = $_POST['task'];
         $this->dataBase->addTask($task, $_SESSION['U_ID']);
-        header('Location: /Projects/ToDoApp/public/');
+        $this->getTasks();        
+    }
+
+    public function getTasks(){
+        $lel = json_encode(['test' => 1]);
+        header('Content-Type: application/json');
+        echo json_encode($lel);
     }
 }
 

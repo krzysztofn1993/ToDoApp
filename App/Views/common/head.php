@@ -16,4 +16,5 @@
     <link rel="stylesheet" type="text/css" href="../vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
 </head>

@@ -198,8 +198,8 @@ class Database {
         $sql->bindValue(':user_login', $login);
 
         $sql->execute();
-        return $sql->fetchAll();
 
+        return $sql->fetchAll();
     }
 }
     

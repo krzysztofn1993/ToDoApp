@@ -13,14 +13,14 @@
     </form>
     <?php
     if (!empty($tasks)) {
-        $iteration = count($tasks) -1;
+        $iteration = count($tasks) - 1;
         $length = $iteration;
         echo '<ul class="list-group container my-4 tasks">';
         foreach ($tasks as $task) {
             echo '<li class="row tasks__positions align-items-start my-2" data-id="'. ($length - $iteration) . '">' .
             '<div class="tasks__text col-lg-11 col-10 align-self-center">' . ucfirst($tasks[$iteration]['TASK']) . '</div>' .
             '<div class="col-lg-1 col-2 px-0 d-flex justify-content-end">' .
-            '<a class="btn btn-success tasks__done mx-1 my-1" tabindex="0"></span><i class="far fa-check-square">' . 
+            '<a href="#" class="btn btn-success tasks__done mx-1 my-1" tabindex="0"></span><i class="far fa-check-square">' . 
             '</i></a></div></li>';
             $iteration--;
         }
@@ -28,3 +28,4 @@
     }
     ?>
 </div>
+<script src="scripts/addTaskAjax.js"></script>

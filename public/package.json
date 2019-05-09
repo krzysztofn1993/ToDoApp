@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/krzysztofn1993/ToDoApp#readme",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.1"
+    "@fortawesome/fontawesome-free": "^5.8.1",
+    "jquery": "^3.4.1"
   }
 }

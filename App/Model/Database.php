@@ -76,9 +76,24 @@ class Database {
     {
         $this->connectToDB();
 
-        $sql = $this->db->prepare('SELECT TASK FROM TASKS WHERE USER_ID = :user_id;');
+        $sql = $this->db->prepare('SELECT TASK FROM TASKS WHERE USER_ID = :user_id');
 
-        $sql->bindValue(':user_id', $user_id);
+        $sql->bindValue('user_id', $user_id);
+
+        $sql->execute();
+        $result = $sql->fetchAll();
+        $this->db = null;
+
+        return $result;
+    }
+
+    public function getUsersNewTask(string $user_id): ?array
+    {
+        $this->connectToDB();
+
+        $sql = $this->db->prepare('SELECT TASK FROM TASKS WHERE USER_ID = :user_id ORDER BY CREATION_DATE DESC LIMIT 1');
+
+        $sql->bindValue('user_id', $user_id);
 
         $sql->execute();
         $result = $sql->fetchAll();

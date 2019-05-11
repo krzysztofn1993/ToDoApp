@@ -22,17 +22,28 @@ class Home {
         require_once('../App/Views/content/Home.php');
     }
 
-    public function addTask()
+    public function addTaskAjax()
     {
         $task = $_POST['task'];
         $this->dataBase->addTask($task, $_SESSION['U_ID']);
-        $this->getTasks();        
+        $this->getNewTaskAjax();        
     }
 
-    public function getTasks(){
-        $lel = json_encode(['test' => 1]);
+    private function getNewTaskAjax(){
+        $task = $this->dataBase->getUsersNewTask($_SESSION['U_ID']);
         header('Content-Type: application/json');
-        echo json_encode($lel);
+        echo json_encode($this->prepareTasksAjaxResponse($task));
+    }
+
+    private function prepareTasksAjaxResponse(array $tasks): array
+    {
+        $preparedData = [];
+        
+        foreach ($tasks as $task) {
+            $preparedData[] = $task['TASK'];
+        }
+
+        return $preparedData;
     }
 }
 

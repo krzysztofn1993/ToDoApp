@@ -18,7 +18,7 @@
             echo '<li class="row tasks__positions align-items-start my-2" data-id="'. ($length - $iteration) . '">' .
             '<div class="tasks__text col-lg-11 col-10 align-self-center">' . ucfirst($tasks[$iteration]['TASK']) . '</div>' .
             '<div class="col-lg-1 col-2 px-0 d-flex justify-content-end">' .
-            '<a href="#" class="btn btn-success tasks__done mx-1 my-1" tabindex="0"></span><i class="far fa-check-square">' . 
+            '<a href="#" class="btn btn-success tasks__done mx-1 my-1" tabindex="0"><i class="far fa-check-square">' . 
             '</i></a></div></li>';
             $iteration--;
         }

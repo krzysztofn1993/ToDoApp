@@ -9,12 +9,16 @@ $(document).ready(function(){
             dataType: 'JSON',
             success: function (data) {
                 addTaskToList(data);
+            },
+            data:  {
+                task: $('input[name="task"]').val()
             }
         })
     })
 
     function addTaskToList (data) {
         $('input[name="task"]').val('');
+        
         $('.list-group').prepend(
             '<li class="row tasks__positions align-items-start my-2" data-id="">' +
                 '<div class="tasks__text col-lg-11 col-10 align-self-center">' + data[0] + '</div>' +

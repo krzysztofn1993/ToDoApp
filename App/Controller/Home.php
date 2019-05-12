@@ -5,7 +5,8 @@ namespace App\Controller;
 use App\Model\Database;
 
 
-class Home {
+class Home
+{
 
     private $dataBase;
 
@@ -15,8 +16,8 @@ class Home {
     }
 
     public function index()
-    {   
-        if(isset($_SESSION['U_ID']) && $_SESSION['U_ID'] !=='' ) {
+    {
+        if (isset($_SESSION['U_ID']) && $_SESSION['U_ID'] !== '') {
             $tasks = $this->dataBase->getUserTasks($_SESSION['U_ID']);
         }
         require_once('../App/Views/content/Home.php');
@@ -26,16 +27,18 @@ class Home {
     {
         $task = $_POST['task'];
         $this->dataBase->addTask($task, $_SESSION['U_ID']);
-        $this->getNewTaskAjax();        
+        $this->getNewTaskAjax();
     }
 
     public function removeTaskAjax()
     {
         $task = $_POST['task'];
-        $this->dataBase->removeUsersTask($task, $_SESSION['U_ID']);    
+        $task_id = $_POST['task_id'];
+        $this->dataBase->removeUsersTask($task, $task_id, $_SESSION['U_ID']);
     }
 
-    private function getNewTaskAjax(){
+    private function getNewTaskAjax()
+    {
         $task = $this->dataBase->getUsersNewTask($_SESSION['U_ID']);
         header('Content-Type: application/json');
         echo json_encode($this->prepareNewTasksAjaxResponse($task));
@@ -44,7 +47,7 @@ class Home {
     private function prepareNewTasksAjaxResponse(array $tasks): array
     {
         $preparedData = [];
-        
+
         foreach ($tasks as $task) {
             $preparedData[] = $task['TASK'];
         }
@@ -52,5 +55,3 @@ class Home {
         return $preparedData;
     }
 }
-
-?>

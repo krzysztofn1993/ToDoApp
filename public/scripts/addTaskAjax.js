@@ -1,17 +1,14 @@
 $(document).ready(function(){
-    var oldData = [];
+    
     $('#button-addon2').on('click', function() {
+        $('input[name="task"]').val()
+
         $.ajax({
             url: './Home/addTaskAjax',
             method: 'POST',
             dataType: 'JSON',
-            data:  {
-                task: $('input[name="task"]').val()
-            },
             success: function (data) {
                 addTaskToList(data);
-            },
-            error: function (jqXHR, status, errorThrown) {
             }
         })
     })
@@ -33,8 +30,6 @@ $(document).ready(function(){
 
         for (let index = 0; index < allTasks.length; index++) {
             $(allTasks[index]).attr('data-id', index);
-            
         }
     }
-
 });

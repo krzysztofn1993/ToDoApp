@@ -76,7 +76,7 @@ class Database {
     {
         $this->connectToDB();
 
-        $sql = $this->db->prepare('SELECT TASK FROM TASKS WHERE USER_ID = :user_id');
+        $sql = $this->db->prepare('SELECT TASK FROM TASKS WHERE USER_ID = :user_id and DONE <> 1');
 
         $sql->bindValue('user_id', $user_id);
 
@@ -123,6 +123,21 @@ class Database {
         }
 
         return false;
+    }
+
+    public function removeUsersTask(string $task, string $user_id): bool
+    {
+        $this->connectToDB();
+
+        $sql = $this->db->prepare('UPDATE TASKS SET DONE = 1 WHERE TASK = :task and USER_ID = :user_id');
+
+        $sql->bindValue(':task', $task);
+        $sql->bindValue(':user_id', $user_id);
+
+        $result = $sql->execute();
+        $this->db = null;
+
+        return $result;
     }
         
     private function connectToDB(): void

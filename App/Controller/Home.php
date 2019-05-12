@@ -29,13 +29,19 @@ class Home {
         $this->getNewTaskAjax();        
     }
 
+    public function removeTaskAjax()
+    {
+        $task = $_POST['task'];
+        $this->dataBase->removeUsersTask($task, $_SESSION['U_ID']);    
+    }
+
     private function getNewTaskAjax(){
         $task = $this->dataBase->getUsersNewTask($_SESSION['U_ID']);
         header('Content-Type: application/json');
-        echo json_encode($this->prepareTasksAjaxResponse($task));
+        echo json_encode($this->prepareNewTasksAjaxResponse($task));
     }
 
-    private function prepareTasksAjaxResponse(array $tasks): array
+    private function prepareNewTasksAjaxResponse(array $tasks): array
     {
         $preparedData = [];
         

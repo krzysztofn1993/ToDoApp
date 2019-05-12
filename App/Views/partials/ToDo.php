@@ -27,3 +27,4 @@
     ?>
 </div>
 <script src="scripts/addTaskAjax.js"></script>
+<script src="scripts/removeTaskAjax.js"></script>

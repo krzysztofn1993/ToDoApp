@@ -1,2 +1,4 @@
+    <script src="scripts/main.js"></script>
     </body>
-</html>
+
+    </html>

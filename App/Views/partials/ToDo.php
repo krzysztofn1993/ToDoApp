@@ -1,19 +1,28 @@
-<div class="d-flex flex-column container container-fluid justify-content-center my-5 col-lg-7
-col-md-8">
-    <form action="" method="POST">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" 
-                placeholder="What you have to do.." aria-label="Recipient's username" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                <button class="btn btn-success" type="submit" id="button-addon2">Add</button>
-            </div>
+<?php require_once('../App/Views/common/header.php') ?>
+<div class="d-flex flex-column container wrapper container-fluid justify-content-center my-5 col-lg-7
+    col-md-8">
+    <div class="input-group mb-3">
+        <input type="text" name="task" class="form-control" placeholder="What you have to do.." aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
+        <div class="input-group-append">
+            <button class="btn btn-success" type="submit" id="button-addon2">Add</button>
         </div>
-    </form>
-    <ul class="list-group my-4 tasks">
-        <li class="list-group-item my-1 tasks__position">Cras justo odio</li>
-        <li class="list-group-item my-1 tasks__position">Dapibus ac facilisis in</li>
-        <li class="list-group-item my-1 tasks__position">Morbi leo risus</li>
-        <li class="list-group-item my-1 tasks__position">Porta ac consectetur ac</li>
-        <li class="list-group-item my-1 tasks__position">Vestibulum at eros</li>
-    </ul>
+    </div>
+    <?php
+    if (!empty($tasks)) {
+        $iteration = count($tasks) - 1;
+        $length = $iteration;
+        echo '<ul class="list-group container my-4 tasks">';
+        foreach ($tasks as $task) {
+            echo '<li class="row tasks__positions align-items-start my-2" data-id="' . $tasks[$iteration]['ID'] . '">' .
+                '<div class="tasks__text col-lg-11 col-10 align-self-center">' . ucfirst($tasks[$iteration]['TASK']) . '</div>' .
+                '<div class="col-lg-1 col-2 px-0 d-flex justify-content-end">' .
+                '<a href="#" class="btn btn-success tasks__done mx-1 my-1" tabindex="0"><i class="far fa-check-square">' .
+                '</i></a></div></li>';
+            $iteration--;
+        }
+        echo '</ul>';
+    }
+    ?>
 </div>
+<script src="scripts/addTaskAjax.js"></script>
+<script src="scripts/removeTaskAjax.js"></script>

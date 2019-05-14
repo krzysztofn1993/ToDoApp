@@ -1,13 +1,23 @@
-<?php 
+<?php
 
 namespace Core;
 
 use App\Helpers\Error;
 
-class Router {
+class Router
+{
 
     protected $controller = 'App\Controller\Home';
     protected $method = 'index';
+    private static $instance = null;
+
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new Router;
+        }
+        return self::$instance;
+    }
 
     public function goTo($url)
     {
@@ -26,27 +36,27 @@ class Router {
         }
     }
 
-    protected function createControllerNamespace(string $url) : string
+    private function createControllerNamespace(string $url): string
     {
         preg_match('/(\w+)\/?/', $url, $matches);
-        $this->controller = preg_replace('/(\w+)$/', ucfirst(strtolower($matches[1])) , $this->controller);
+        $this->controller = preg_replace('/(\w+)$/', ucfirst(strtolower($matches[1])), $this->controller);
 
         return $this->controller;
     }
 
-    protected function checkIfControllerExists() : bool
+    private function checkIfControllerExists(): bool
     {
-        if(class_exists($this->controller)) {
+        if (class_exists($this->controller)) {
 
             return true;
         } else {
             throw new Error('Controller doesnt exist');
         }
     }
-    
-    protected function checkIfMethodExists($url) : bool
+
+    private function checkIfMethodExists($url): bool
     {
-        if (preg_match('/\/(\w+)\/?/', $url, $matches) == true ) {
+        if (preg_match('/\/(\w+)\/?/', $url, $matches) == true) {
             $this->method = $matches[1];
             if (method_exists($this->controller, $this->method)) {
 
@@ -55,24 +65,22 @@ class Router {
                 throw new Error("$this->method does not exist in $this->controller");
             }
         } elseif (!isset($matches[1])) {
-            
+
             return true;
         } else {
             throw new Error("Bad url given: $url");
         }
     }
-    
-    protected function callPage()
+
+    private function callPage()
     {
         $this->controller = new $this->controller;
         call_user_func([$this->controller, $this->method]);
     }
 
-    protected function sanitizeURL(string $url) : string
+    private function sanitizeURL(string $url): string
     {
         $url = trim($url);
-        return $url; 
+        return $url;
     }
 }
-
-?>

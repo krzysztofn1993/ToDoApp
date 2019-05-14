@@ -1,25 +1,33 @@
-<?php 
+<?php
 
 namespace App\Model;
 
-class User {
+class User
+{
 
     private $id;
     private $login;
     private $hashed_password;
     private $password;
     private $date;
+    private $dataBase;
 
-    public function getID(): string 
+    public function __construct()
+    {
+        $this->dataBase = Database::getInstance();
+    }
+
+    public function getID(): string
     {
         return $this->id;
     }
 
-    public function setID(int $id)
+    public function setID(string $login)
     {
-        $this->id = $id;
+        $response = $this->dataBase->getUserId($login);
+        $this->id = $response[0]['USER_ID'];
     }
-    public function getLogin(): string 
+    public function getLogin(): string
     {
         return $this->login;
     }
@@ -28,7 +36,7 @@ class User {
     {
         $this->login = $login;
     }
-    public function getPassword(): string 
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -38,7 +46,7 @@ class User {
         $this->password = $password;
         $this->setHashedPassword($password);
     }
-    public function getHashedPassword(): string 
+    public function getHashedPassword(): string
     {
         return $this->hashed_password;
     }
@@ -47,7 +55,7 @@ class User {
     {
         $this->hashed_password = password_hash($password, PASSWORD_DEFAULT);
     }
-    public function getDate(): string 
+    public function getDate(): string
     {
         return $this->date;
     }
@@ -57,5 +65,3 @@ class User {
         $this->date = date("Y-m-d H:i:s");
     }
 }
-
-?>

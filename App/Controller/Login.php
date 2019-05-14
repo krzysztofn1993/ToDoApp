@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Model\Database;
 use App\Model\User;
 
-
-class Login {
+class Login
+{
 
     private $user;
     private $dataBase;
@@ -19,26 +19,30 @@ class Login {
 
     public function check()
     {
-        $this->user->setLogin($_POST['login']);
-        $this->user->setPassword($_POST['password']);
-        $this->user->setDate();
-        unset($_POST);
+        $this->setUserCredentials();
+
         if ($this->dataBase->login($this->user)) {
-            $this->setUserLoggedSession($this->user);
+            $this->user->setID($_POST['login']);
+            $this->setUserLoggedSession();
             header('Location: /Projects/ToDoApp/public/');
-        }
-        else {
+        } else {
             $this->setUserBadLoginSession();
             header('Location: /Projects/ToDoApp/public/');
         }
     }
-    
-    private function setUserLoggedSession(user $user)
+
+    public function logout()
     {
-        $_SERVER['PHP_AUTH_USER'] = $user->getLogin();
-        $_SERVER['PHP_AUTH_PW'] = $user->getHashedPassword();
+        session_unset();
+        header('Location: /Projects/ToDoApp/public/');
     }
-    
+
+    private function setUserLoggedSession()
+    {
+        $_SESSION['lastActionTime'] = time();
+        $_SESSION['U_ID'] = $this->user->getID();
+    }
+
     private function setUserBadLoginSession()
     {
         if (isset($_SERVER['PHP_AUTH_USER']) &&  isset($_SERVER['PHP_AUTH_PW'])) {
@@ -46,6 +50,11 @@ class Login {
             unset($_SERVER['PHP_AUTH_PW']);
         }
     }
-}
 
-?>
+    private function setUserCredentials()
+    {
+        $this->user->setLogin($_POST['login']);
+        $this->user->setPassword($_POST['password']);
+        $this->user->setDate();
+    }
+}

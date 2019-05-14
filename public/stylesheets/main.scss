@@ -1,0 +1,44 @@
+::-webkit-input-placeholder {
+    text-align: center;
+}
+
+.row {
+    display: flex !important;
+}
+
+.done {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+*:focus {
+    border: 1px solid black !important;
+}
+
+.tasks {
+    &__positions {
+        position: relative;
+        background: white;
+        border-radius: 0 0.25rem 0.25rem 0;
+        margin-left: 0 !important;
+        transition: 0.5s all cubic-bezier(0.46, 0.51, 0.17, 0.88);
+    }
+    &__text {
+        word-break: break-all;
+    }
+    &__done {
+        border-radius: 0 0.15rem 0.15rem 0;
+        padding: 1px 6px;
+        cursor: pointer;
+    }
+}
+
+.strikethrough {
+    text-decoration: line-through;
+    background: rgba($color: #86b1da, $alpha: 0.8);
+    box-shadow: inset -100vw 0 1px rgba($color: #86b1da, $alpha: 1);
+}
+
+i {
+    color: white;
+}

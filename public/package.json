@@ -1,0 +1,23 @@
+{
+  "name": "todoapp",
+  "version": "1.0.0",
+  "description": "ToDoApp project",
+  "main": "public/scrips/main.js",
+  "scripts": {
+    "test": "\u001b[A\u001b[B"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krzysztofn1993/ToDoApp.git"
+  },
+  "author": "KrzysztofN1993",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krzysztofn1993/ToDoApp/issues"
+  },
+  "homepage": "https://github.com/krzysztofn1993/ToDoApp#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.8.1",
+    "jquery": "^3.4.1"
+  }
+}

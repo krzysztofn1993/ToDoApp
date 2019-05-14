@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Model\Database;
 
-
 class Home
 {
 

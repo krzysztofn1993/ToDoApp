@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Model\Database;
 use App\Model\User;
 
-
-class Login {
+class Login
+{
 
     private $user;
     private $dataBase;
@@ -25,13 +25,12 @@ class Login {
             $this->user->setID($_POST['login']);
             $this->setUserLoggedSession();
             header('Location: /Projects/ToDoApp/public/');
-        }
-        else {
+        } else {
             $this->setUserBadLoginSession();
             header('Location: /Projects/ToDoApp/public/');
         }
     }
-    
+
     public function logout()
     {
         session_unset();
@@ -43,7 +42,7 @@ class Login {
         $_SESSION['lastActionTime'] = time();
         $_SESSION['U_ID'] = $this->user->getID();
     }
-    
+
     private function setUserBadLoginSession()
     {
         if (isset($_SERVER['PHP_AUTH_USER']) &&  isset($_SERVER['PHP_AUTH_PW'])) {
@@ -59,5 +58,3 @@ class Login {
         $this->user->setDate();
     }
 }
-
-?>

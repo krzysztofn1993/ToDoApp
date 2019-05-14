@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 namespace App\Model;
 
-use App\Helpers\Error;
 use App\Model\User;
 
-class Database {
+class Database
+{
 
     private $dbName = 'test';
     private $db = null;
@@ -15,7 +15,7 @@ class Database {
     private static $instance = null;
 
     private function __construct()
-    {       
+    {
         $this->connectToDB();
         $this->createUsersTableIfNotExists();
         $this->createTasksTableIfNotExists();
@@ -33,7 +33,7 @@ class Database {
     public function registerUser(user $user): bool
     {
         if ($this->canRegister($user->getLogin())) {
-            return $this->insertUserToDataBase($user);    
+            return $this->insertUserToDataBase($user);
         } else {
             return false;
         }
@@ -108,7 +108,7 @@ class Database {
             $this->connectToDB();
 
             $sql = $this->db->prepare('INSERT INTO Tasks(USER_ID, TASK, DONE, CREATION_DATE, MODIFICATION_DATE) VALUES' .
-            '(:user_id, :task, :done, :creation_date, :modification_date)');
+                '(:user_id, :task, :done, :creation_date, :modification_date)');
 
             $sql->bindValue(':user_id', $user_id);
             $sql->bindValue(':task', $task);
@@ -132,15 +132,15 @@ class Database {
         $sql = $this->db->prepare('UPDATE TASKS SET DONE = 1 WHERE TASK = :task AND ID = :task_id AND USER_ID = :user_id');
 
         $sql->bindValue(':task', $task);
-        $sql->bindValue(':task_id', $$task_id);
+        $sql->bindValue(':task_id', $task_id);
         $sql->bindValue(':user_id', $user_id);
 
         $result = $sql->execute();
         $this->db = null;
-
+        echo json_encode($task_id);
         return $result;
     }
-        
+
     private function connectToDB(): void
     {
         try {
@@ -161,38 +161,39 @@ class Database {
         $sql->execute();
         $result = $sql->fetchAll();
         $this->db = null;
-        
+
         return !empty($result);
     }
 
     private function createDB(): bool
-    {       
+    {
         $sql = $this->db->prepare('CREATE DATABASE IF NOT EXISTS :dbName');
         $sql->bindValue(':dbName', $this->dbName);
 
         $this->db = new \PDO("mysql:host=$this->localhost");
-        
+
         return $sql->execute();
     }
-        
+
     private function selectDB(): void
     {
         $query = "mysql:host=$this->localhost;dbname=$this->dbName";
         $this->db = new \PDO(
-            $query, 
-            $this->dbUser, 
-            $this->dbPassword);
+            $query,
+            $this->dbUser,
+            $this->dbPassword
+        );
     }
-        
+
     private function createUsersTableIfNotExists(): bool
     {
         $this->connectToDB();
 
         $sql = $this->db->prepare(
             'CREATE TABLE IF NOT EXISTS Users(USER_ID INT NOT NULL AUTO_INCREMENT,' .
-            'LOGIN VARCHAR(30)  NOT NULL, PASSWORD VARCHAR(255) NOT NULL,' .
-            'DATE DATETIME, PRIMARY KEY (USER_ID));'
-            );
+                'LOGIN VARCHAR(30)  NOT NULL, PASSWORD VARCHAR(255) NOT NULL,' .
+                'DATE DATETIME, PRIMARY KEY (USER_ID));'
+        );
 
         $result = $sql->execute();
         $this->db = null;
@@ -206,18 +207,18 @@ class Database {
 
         $sql = $this->db->prepare(
             'CREATE TABLE IF NOT EXISTS Tasks(' .
-            'ID INT NOT NULL AUTO_INCREMENT,' .
-            'USER_ID INT,' .
-            'TASK VARCHAR(1000) NOT NULL,' .
-            'DONE BOOLEAN,' .
-            'CREATION_DATE DATETIME,' .
-            'MODIFICATION_DATE DATETIME,' .
-            'PRIMARY KEY (ID));'
-            );
+                'ID INT NOT NULL AUTO_INCREMENT,' .
+                'USER_ID INT,' .
+                'TASK VARCHAR(1000) NOT NULL,' .
+                'DONE BOOLEAN,' .
+                'CREATION_DATE DATETIME,' .
+                'MODIFICATION_DATE DATETIME,' .
+                'PRIMARY KEY (ID));'
+        );
 
         $result = $sql->execute();
         $this->db = null;
-        
+
         return $result;
     }
 
@@ -233,5 +234,3 @@ class Database {
         return $sql->fetchAll();
     }
 }
-    
-?>

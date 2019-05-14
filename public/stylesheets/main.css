@@ -1,44 +1,44 @@
 ::-webkit-input-placeholder {
-  text-align: center;
+    text-align: center;
 }
 
 .row {
-  display: flex !important;
+    display: flex !important;
 }
 
 .done {
-  margin: 0 !important;
-  padding: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 *:focus {
-  border: 1px solid black !important;
+    border: 1px solid black !important;
 }
 
 .tasks__positions {
-  position: relative;
-  background: white;
-  border-radius: 0 0.25rem 0.25rem 0;
-  margin-left: 0 !important;
-  transition: 0.5s all cubic-bezier(0.46, 0.51, 0.17, 0.88);
+    position: relative;
+    background: white;
+    border-radius: 0 0.25rem 0.25rem 0;
+    margin-left: 0 !important;
+    transition: 0.5s all cubic-bezier(0.46, 0.51, 0.17, 0.88);
 }
 .tasks__text {
-  word-break: break-all;
+    word-break: break-all;
 }
 .tasks__done {
-  border-radius: 0 0.15rem 0.15rem 0;
-  padding: 1px 6px;
-  cursor: pointer;
+    border-radius: 0 0.15rem 0.15rem 0;
+    padding: 1px 6px;
+    cursor: pointer;
 }
 
 .strikethrough {
-  text-decoration: line-through;
-  background: rgba(134, 177, 218, 0.8);
-  box-shadow: inset -100vw 0 1px #86b1da;
+    text-decoration: line-through;
+    background: rgba(134, 177, 218, 0.8);
+    box-shadow: inset -100vw 0 1px #86b1da;
 }
 
 i {
-  color: white;
+    color: white;
 }
 
 /*# sourceMappingURL=main.css.map */

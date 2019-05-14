@@ -11,4 +11,3 @@ $router = Router::getInstance();
 $session = SessionChecker::getInstance();
 $session->sessionCheck();
 $router->goTo($_SERVER['QUERY_STRING']);
-?>

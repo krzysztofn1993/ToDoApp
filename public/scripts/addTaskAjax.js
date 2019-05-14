@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('#button-addon2').on('click', function() {
-        $('input[name="task"]').val();
+        let task = $('input[name="task"]').val();
 
         $.ajax({
             url: './Home/addTaskAjax',
@@ -10,9 +10,10 @@ $(document).ready(function() {
                 addTaskToList(data);
             },
             data: {
-                task: $('input[name="task"]').val()
+                task: task
             }
         });
+        task = '';
     });
 
     function addTaskToList(data) {

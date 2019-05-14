@@ -129,11 +129,12 @@ class Database
     {
         $this->connectToDB();
 
-        $sql = $this->db->prepare('UPDATE TASKS SET DONE = 1 WHERE TASK = :task AND ID = :task_id AND USER_ID = :user_id');
+        $sql = $this->db->prepare('UPDATE TASKS SET DONE = 1, MODIFICATION_DATE = :modification_date WHERE TASK = :task AND ID = :task_id AND USER_ID = :user_id');
 
         $sql->bindValue(':task', $task);
         $sql->bindValue(':task_id', $task_id);
         $sql->bindValue(':user_id', $user_id);
+        $sql->bindValue(':modification_date', date("Y-m-d H:i:s"));
 
         $result = $sql->execute();
         $this->db = null;

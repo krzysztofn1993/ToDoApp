@@ -1,7 +1,9 @@
 $(document).ready(function() {
     $('#button-addon2').on('click', function() {
         let task = $('input[name="task"]').val();
-
+        if (task == '' || task == undefined) {
+            return;
+        }
         $.ajax({
             url: './Home/addTaskAjax',
             method: 'POST',
@@ -13,7 +15,12 @@ $(document).ready(function() {
                 task: task
             }
         });
-        task = '';
+    });
+
+    $(document).keypress(function(event) {
+        if (event.keyCode == 13) {
+            $('#button-addon2').click();
+        }
     });
 
     function addTaskToList(data) {

@@ -25,8 +25,9 @@ class Home
     public function addTaskAjax()
     {
         $task = $_POST['task'];
-        $this->dataBase->addTask($task, $_SESSION['U_ID']);
-        $this->getNewTaskAjax();
+        if ($this->dataBase->addTask($task, $_SESSION['U_ID'])) {
+            $this->getNewTaskAjax();
+        }
     }
 
     public function removeTaskAjax()

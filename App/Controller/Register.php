@@ -31,7 +31,7 @@ class Register
         if ($this->dataBase->registerUser($this->user)) {
             header('Location: /Projects/ToDoApp/public/');
         } else {
-            header('Location: /Projects/ToDoApp/public/register/');
+            header('Location: /Projects/ToDoApp/public/register');
         }
     }
 }

@@ -81,6 +81,11 @@ class Router
     private function sanitizeURL(string $url): string
     {
         $url = trim($url);
+        preg_match('/^(.*)(\/)+$/', $url, $matches);
+        if (isset($matches[2])) {
+            header('Location: /Projects/ToDoApp/public/' . $matches[1]);
+        }
+
         return $url;
     }
 }
